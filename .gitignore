@@ -1,0 +1,23 @@
+.env
+.venv/
+.tmp-ci-venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+dist/
+build/
+*.egg-info/
+*.log
+
+data_cache.pkl
+
+# WorldQuant proprietary documentation — supply your own, never commit
+wq-ops.pdf
+*.pdf
+src/worldquant_mcp/reference/data/wq-ops.md
+src/worldquant_mcp/reference/data/wq-ops.chunks.json

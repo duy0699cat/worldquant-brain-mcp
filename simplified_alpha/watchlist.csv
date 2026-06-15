@@ -1,0 +1,99 @@
+ticker,sector
+AAPL,Technology
+ABBV,Healthcare
+ABT,Healthcare
+ACN,Technology
+ADBE,Technology
+AIG,Financials
+AMGN,Healthcare
+AMT,Real Estate
+AMZN,Consumer Discretionary
+AVGO,Technology
+AXP,Financials
+BA,Industrials
+BAC,Financials
+BK,Financials
+BKNG,Consumer Discretionary
+BLK,Financials
+BMY,Healthcare
+BRK.B,Financials
+C,Financials
+CAT,Industrials
+CHTR,Communication Services
+CL,Consumer Staples
+CMCSA,Communication Services
+COF,Financials
+COP,Energy
+COST,Consumer Staples
+CRM,Technology
+CSCO,Technology
+CVS,Healthcare
+CVX,Energy
+DE,Industrials
+DHR,Healthcare
+DIS,Communication Services
+DOW,Materials
+DUK,Utilities
+EMR,Industrials
+F,Consumer Discretionary
+FDX,Industrials
+GD,Industrials
+GE,Industrials
+GILD,Healthcare
+GM,Consumer Discretionary
+GOOGL,Communication Services
+GS,Financials
+HD,Consumer Discretionary
+HON,Industrials
+IBM,Technology
+INTC,Technology
+JNJ,Healthcare
+JPM,Financials
+KHC,Consumer Staples
+KO,Consumer Staples
+LIN,Materials
+LLY,Healthcare
+LMT,Industrials
+LOW,Consumer Discretionary
+MA,Financials
+MCD,Consumer Discretionary
+MDLZ,Consumer Staples
+MDT,Healthcare
+MET,Financials
+META,Communication Services
+MMM,Industrials
+MO,Consumer Staples
+MRK,Healthcare
+MS,Financials
+MSFT,Technology
+NEE,Utilities
+NFLX,Communication Services
+NKE,Consumer Discretionary
+NVDA,Technology
+ORCL,Technology
+PEP,Consumer Staples
+PFE,Healthcare
+PG,Consumer Staples
+PM,Consumer Staples
+PYPL,Financials
+QCOM,Technology
+RTX,Industrials
+SBUX,Consumer Discretionary
+SCHW,Financials
+SO,Utilities
+SPG,Real Estate
+T,Communication Services
+TGT,Consumer Discretionary
+TMO,Healthcare
+TMUS,Communication Services
+TSLA,Consumer Discretionary
+TXN,Technology
+UNH,Healthcare
+UNP,Industrials
+UPS,Industrials
+USB,Financials
+V,Financials
+VZ,Communication Services
+WFC,Financials
+WMT,Consumer Staples
+XOM,Energy

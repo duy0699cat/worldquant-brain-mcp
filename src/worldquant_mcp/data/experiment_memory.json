@@ -1,0 +1,4657 @@
+[
+  {
+    "timestamp": "2026-05-13T10:00:00+00:00",
+    "theme": "microstructure-c-sweep-design-isolation",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Five design-choice probes from the npnbjY0a anchor: ts_zscore vs group_zscore on returns input leg, volume-leg neutralization, both-legs neutralization, 65d window robustness, ts_decay_linear smoothing without ts_rank.",
+    "summary": "All 5 completed. npnbjY0a Fitness 0.75 remains unbeaten. Critical verdicts: (1) volume leg must NOT be neutralized \u2014 C2 (volume-leg only, 0.38) < C3 (both legs, 0.29) < npnbjY0a (returns-leg only, 0.75). Absolute volume flow is load-bearing. (2) ts_decay_linear does not help correlation signals \u2014 C5 dropped Fitness from 0.75 to 0.63 while lowering turnover; decay is also destructive here, just less so than ts_rank. (3) group_zscore on returns input beats ts_zscore \u2014 C1 at 0.51 vs npnbjY0a 0.75; peer-relative excess return is the right concept. (4) 55d window remains the peak even with neutralized inputs (C4 at 0.55). npnbjY0a is a confirmed local optimum. Next move must widen mechanism or wait for SELF_CORR on npnbjY0a.",
+    "localBestAlphaId": "zq5aX5PK",
+    "localBestExpression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+    "localBestMetrics": {
+      "sharpe": 1.3,
+      "fitness": 0.8,
+      "subUniverseSharpe": 1.2
+    },
+    "localBestNote": "Superseded npnbjY0a as of D-sweep (2026-05-13). Sharpe 1.30 clears the 1.25 submission bar. Fitness 0.80 is new high, gap -0.20 to submission. Fitness is now the sole binding constraint.",
+    "lessons": [
+      "Volume leg in return-volume correlation must stay unneutralized. group_zscore(ts_delta(volume,1), subindustry) destroys the signal. Absolute volume flow is the mechanism; peer-relative volume flow is not.",
+      "ts_decay_linear does not help correlation-based signals. Like ts_rank, it degrades fitness \u2014 just less severely. Decay compresses the returns-generating activity alongside the noise.",
+      "group_zscore on the returns input leg is the only correct neutralization intervention for this family. C1 (ts_zscore) < npnbjY0a (group_zscore) confirms peer-relative excess return matters more than historical self-normalization.",
+      "55-day window is the local peak regardless of input-leg normalization. C4 at 65 days degraded from 0.75 to 0.55."
+    ],
+    "expressions": [
+      "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_delta(volume,1), 55)))",
+      "rank(reverse(ts_corr(returns, group_zscore(ts_delta(volume,1), subindustry), 55)))",
+      "rank(reverse(ts_corr(group_zscore(returns, subindustry), group_zscore(ts_delta(volume,1), subindustry), 55)))",
+      "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 65)))",
+      "rank(ts_decay_linear(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)), 7))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "RRNXJkk1",
+        "expression": "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 0.88,
+          "fitness": 0.51,
+          "returns": 0.0427,
+          "turnover": 0.0747,
+          "drawdown": 0.1685,
+          "margin": 0.001143,
+          "subUniverseSharpe": 1.09
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.88
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.51
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "VkXnvdwb",
+        "expression": "rank(reverse(ts_corr(returns, group_zscore(ts_delta(volume,1), subindustry), 55)))",
+        "metrics": {
+          "sharpe": 0.76,
+          "fitness": 0.38,
+          "returns": 0.0315,
+          "turnover": 0.0813,
+          "drawdown": 0.1386,
+          "margin": 0.000774,
+          "subUniverseSharpe": 0.85
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.76
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.38
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "mLqOPvmp",
+        "expression": "rank(reverse(ts_corr(group_zscore(returns, subindustry), group_zscore(ts_delta(volume,1), subindustry), 55)))",
+        "metrics": {
+          "sharpe": 0.64,
+          "fitness": 0.29,
+          "returns": 0.0248,
+          "turnover": 0.0856,
+          "drawdown": 0.1145,
+          "margin": 0.000579,
+          "subUniverseSharpe": 0.91
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.64
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.29
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "KPnePGb1",
+        "expression": "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 65)))",
+        "metrics": {
+          "sharpe": 0.98,
+          "fitness": 0.55,
+          "returns": 0.039,
+          "turnover": 0.0715,
+          "drawdown": 0.1075,
+          "margin": 0.001091,
+          "subUniverseSharpe": 1.28
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.98
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.55
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "ZYjZY9G0",
+        "expression": "rank(ts_decay_linear(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)), 7))",
+        "metrics": {
+          "sharpe": 1.08,
+          "fitness": 0.63,
+          "returns": 0.0432,
+          "turnover": 0.0647,
+          "drawdown": 0.1071,
+          "margin": 0.001335,
+          "subUniverseSharpe": 1.23
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.08
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.63
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "npnbjY0a is confirmed local optimum in this design space. Stop deepening without a new mechanism idea.",
+      "Monitor SELF_CORRELATION on npnbjY0a. Even if PASS, submission bars not met (Sharpe 1.20 < 1.25, Fitness 0.75 < 1.0). SELF_CORR outcome determines whether to continue this basin or widen search.",
+      "Do not neutralize volume leg. Do not use ts_decay_linear. Do not use ts_zscore on input. group_zscore on returns input only."
+    ]
+  },
+  {
+    "timestamp": "2026-05-13T04:00:00+00:00",
+    "theme": "microstructure-peer-relative-dislocation-b1",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Sector-neutralizing the return-volume correlation signal (B1 peer-relative dislocation) should extract idiosyncratic institutional flow more cleanly than the market-wide rank in Xgkr9QRz. group_zscore / group_rank are the correct tools: they preserve the mean-reverting cross-sectional character while removing sector-level noise.",
+    "summary": "All 5 seeds completed cleanly. B1-4r npnbjY0a (sector-neutralize the returns INPUT leg before computing correlation) is the decisive winner: Sharpe 1.20 / Fitness 0.75 / Sub-U 1.29 \u2014 serious candidate, +0.26/+0.18 above Xgkr9QRz. Design-choice verdicts: (1) outer rank on group_zscore output hurts \u2014 B1-1 (no outer rank, Fitness 0.69) > B1-2 (outer rank, Fitness 0.58); (2) input-leg neutralization wins decisively over output neutralization \u2014 B1-4r at 0.75 vs B1-2 at 0.58; (3) group_rank ~ group_zscore+rank but both inferior to raw group_zscore; (4) subindustry > sector \u2014 B1-5 at 0.54 is below bar. All alphas have SELF_CORRELATION PENDING; all other checks pass.",
+    "localBestAlphaId": "zq5aX5PK",
+    "localBestExpression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+    "localBestMetrics": {
+      "sharpe": 1.3,
+      "fitness": 0.8,
+      "subUniverseSharpe": 1.2
+    },
+    "localBestNote": "Superseded npnbjY0a as of D-sweep (2026-05-13). At time of B1 logging, npnbjY0a was local best. Updated retroactively.",
+    "expressions": [
+      "group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)",
+      "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry))",
+      "group_rank(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)",
+      "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)))",
+      "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), sector))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "QPndpAww",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)",
+        "metrics": {
+          "sharpe": 1.07,
+          "fitness": 0.69,
+          "returns": 0.0524,
+          "turnover": 0.0776,
+          "drawdown": 0.1565,
+          "margin": 0.001351,
+          "subUniverseSharpe": 1.22
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.07
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.69
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "akN3m2v5",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry))",
+        "metrics": {
+          "sharpe": 0.98,
+          "fitness": 0.58,
+          "returns": 0.0443,
+          "turnover": 0.0738,
+          "drawdown": 0.1524,
+          "margin": 0.001202,
+          "subUniverseSharpe": 1.17
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.98
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.58
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "6XRbWPlJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "group_rank(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)",
+        "metrics": {
+          "sharpe": 1.06,
+          "fitness": 0.64,
+          "returns": 0.0454,
+          "turnover": 0.081,
+          "drawdown": 0.1456,
+          "margin": 0.00112,
+          "subUniverseSharpe": 1.18
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.06
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.64
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "npnbjY0a",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.2,
+          "fitness": 0.75,
+          "returns": 0.0489,
+          "turnover": 0.08,
+          "drawdown": 0.1043,
+          "margin": 0.001221,
+          "subUniverseSharpe": 1.29
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.2
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.75
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "2rvkgwgN",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), sector))",
+        "metrics": {
+          "sharpe": 0.91,
+          "fitness": 0.54,
+          "returns": 0.0434,
+          "turnover": 0.0741,
+          "drawdown": 0.1599,
+          "margin": 0.001171,
+          "subUniverseSharpe": 1.18
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.91
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.54
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "npnbjY0a (B1-4r) is the new microstructure_institutional_flow local best. Use as avoidance target in future novelty screens.",
+      "Check SELF_CORRELATION on npnbjY0a after pending window resolves. If passes, submit.",
+      "Follow-up: test (a) ts_zscore on the returns input leg instead of group_zscore, (b) also neutralize the volume leg group_zscore(ts_delta(volume,1), subindustry), (c) window robustness at 45 and 65 days around the B1-4r anchor.",
+      "Do NOT apply outer rank to group_zscore output \u2014 confirmed destructive by B1-1 vs B1-2 comparison."
+    ]
+  },
+  {
+    "timestamp": "2026-05-12T04:00:00+00:00",
+    "theme": "microstructure-o0bgplp7-wrapper-discipline-stoploss",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Apply the full QP2NPG6X wrapper playbook to O0bgpLP7 (the local-best microstructure basin at Sharpe 0.92 / Fitness 0.55) to determine whether ts_rank, inner zscore normalization, or volatility-regime conditioning can lift it toward Sharpe >= 1.1 / Fitness >= 0.70.",
+    "summary": "Ran four disciplined Step A probes on the O0bgpLP7 basin. AST novelty verified all seeds at 0.0909 vs QP2NPG6X. A1 rKb3dNOj (ts_rank + ts_decay_linear wrapper) collapsed to Sharpe 0.24 Fitness 0.06, consistent with the pre-existing 40/60-day ts_rank failures. A3 Xgkr9QRz (inner zscore only, no outer ts_rank) gave the best result: Sharpe 0.94 Fitness 0.57 Sub-U Sharpe 1.12, a mild +0.02/+0.02 improvement over the O0bgpLP7 baseline. A4 qMn1LX5Z (inner zscore + decay + ts_rank) collapsed to Sharpe 0.29 Fitness 0.08, confirming inner zscore does not rescue ts_rank on this basin. A6 mLq3o5O1 (volatility-regime trade_when gate using ts_mean instead of ts_delay) degraded to Sharpe 0.75 Fitness 0.40. Stop-loss triggered at 6 total probes. O0bgpLP7 is now PARKED. Structural conclusion: ts_rank works on trend/momentum signals but destroys mean-reverting or correlation-based cross-sectional signals. This is a mechanistic boundary, not a parameter problem.",
+    "expressions": [
+      "ts_rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 55)), 7), 126)",
+      "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)))",
+      "ts_rank(ts_decay_linear(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)), 7), 126)",
+      "trade_when(greater(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), rank(reverse(ts_corr(returns, ts_delta(volume,1), 55))), -1)"
+    ],
+    "alphas": [
+      {
+        "alphaId": "rKb3dNOj",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 55)), 7), 126)",
+        "metrics": {
+          "sharpe": 0.24,
+          "fitness": 0.06,
+          "returns": 0.008,
+          "turnover": 0.0786,
+          "drawdown": 0.0527,
+          "subUniverseSharpe": null
+        },
+        "blockingChecks": [],
+        "pendingChecks": [],
+        "submittable": false
+      },
+      {
+        "alphaId": "Xgkr9QRz",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)))",
+        "metrics": {
+          "sharpe": 0.94,
+          "fitness": 0.57,
+          "returns": 0.0457,
+          "turnover": 0.0723,
+          "drawdown": 0.1703,
+          "margin": 0.001265,
+          "subUniverseSharpe": 1.12
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.94
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.57
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "qMn1LX5Z",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(ts_decay_linear(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)), 7), 126)",
+        "metrics": {
+          "sharpe": 0.29,
+          "fitness": 0.08,
+          "returns": 0.0095,
+          "turnover": 0.0794,
+          "drawdown": 0.0536,
+          "subUniverseSharpe": 0.47
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.29
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.08
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "mLq3o5O1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "trade_when(greater(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), rank(reverse(ts_corr(returns, ts_delta(volume,1), 55))), -1)",
+        "metrics": {
+          "sharpe": 0.75,
+          "fitness": 0.4,
+          "returns": 0.0349,
+          "turnover": 0.05,
+          "drawdown": 0.1655,
+          "margin": 0.001394,
+          "subUniverseSharpe": 0.89
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.75
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.4
+          }
+        ],
+        "pendingChecks": [
+          "SELF_CORRELATION"
+        ],
+        "submittable": false
+      }
+    ],
+    "localBestAlphaId": "Xgkr9QRz",
+    "localBestExpression": "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)))",
+    "localBestMetrics": {
+      "sharpe": 0.94,
+      "fitness": 0.57,
+      "subUniverseSharpe": 1.12
+    },
+    "lessons": [
+      "ts_rank is destructive on correlation-based and mean-reverting signals because it assumes cross-time persistence. Proven failures: 78amKQR2 (0.08), YP2z2jOq (0.09), rKb3dNOj (0.06), qMn1LX5Z (0.08). Rule: for this signal class use group_zscore / group_rank / trade_when instead.",
+      "Inner zscore normalization (zscore both legs before correlation) does real work: lifts Xgkr9QRz to Sharpe 0.94 / Fitness 0.57 from O0bgpLP7 baseline of 0.92 / 0.55."
+    ],
+    "followUps": [
+      "O0bgpLP7 is PARKED. Xgkr9QRz was the Step A local best (Sharpe 0.94 / Fitness 0.57), subsequently superseded by npnbjY0a (B1-4r, Sharpe 1.20 / Fitness 0.75) from the microstructure-peer-relative-dislocation-b1 experiment.",
+      "Pivot to Step B: peer-relative dislocation (group_zscore / group_rank inside subindustry) \u2014 mechanistically aligned with the ts_rank lesson.",
+      "Do not apply ts_rank to any signal in this basin without a specific new hypothesis about time-series persistence."
+    ]
+  },
+  {
+    "timestamp": "2026-05-07T08:00:00+00:00",
+    "theme": "working-capital-efficiency-deterioration",
+    "mechanism_tag": "working_capital_stress",
+    "mechanism_tags": [
+      "working_capital_stress"
+    ],
+    "hypothesis": "Firms with worsening receivables and inventory efficiency may be overpriced before slower future earnings realization.",
+    "summary": "Backfilled from the research journal. This was the strongest pre-tooling family in the first research session. The best alpha, wpn9PlEd, reversed the yearly change in receivable-to-sales plus inventory-to-cogs efficiency and produced sharpe 0.50, fitness 0.18, returns 0.0160, and turnover 0.0344. It was directionally useful but not submittable because both sharpe and fitness were below threshold.",
+    "expressions": [
+      "rank(reverse(ts_delta(add(divide(ts_backfill(receivable,252), add(abs(ts_backfill(sales,252)),1)), divide(ts_backfill(inventory,252), add(abs(ts_backfill(cogs,252)),1))), 252)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "wpn9PlEd",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_delta(add(divide(ts_backfill(receivable,252), add(abs(ts_backfill(sales,252)),1)), divide(ts_backfill(inventory,252), add(abs(ts_backfill(cogs,252)),1))), 252)))",
+        "metrics": {
+          "sharpe": 0.5,
+          "fitness": 0.18,
+          "returns": 0.016,
+          "turnover": 0.0344,
+          "drawdown": 0.0666,
+          "margin": 0.000933,
+          "subUniverseSharpe": 0.46
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.5
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.18
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Use this family as the working-capital reference cluster in AST novelty validation.",
+      "Compare future orthogonal searches against this basin, not only against options-IV momentum."
+    ],
+    "backfilled_from_journal": true
+  },
+  {
+    "timestamp": "2026-05-07T08:05:00+00:00",
+    "theme": "working-capital-plus-cash-flow-quality",
+    "mechanism_tag": "working_capital_stress",
+    "mechanism_tags": [
+      "working_capital_stress"
+    ],
+    "hypothesis": "The working-capital deterioration signal might improve if paired with a simple cash-flow quality overlay.",
+    "summary": "Backfilled from the research journal. The cash-flow overlay weakened the original working-capital basin rather than improving it. YP2xJlPR remained positive but materially weaker than the pure working-capital version, at sharpe 0.14, fitness 0.03, returns 0.0061, and turnover 0.0337.",
+    "expressions": [
+      "rank(add(reverse(ts_delta(add(divide(ts_backfill(receivable,252), add(abs(ts_backfill(sales,252)),1)), divide(ts_backfill(inventory,252), add(abs(ts_backfill(cogs,252)),1))), 252)), zscore(divide(ts_backfill(cashflow_op,252), add(abs(ts_backfill(income,252)),1)))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "YP2xJlPR",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(ts_delta(add(divide(ts_backfill(receivable,252), add(abs(ts_backfill(sales,252)),1)), divide(ts_backfill(inventory,252), add(abs(ts_backfill(cogs,252)),1))), 252)), zscore(divide(ts_backfill(cashflow_op,252), add(abs(ts_backfill(income,252)),1)))))",
+        "metrics": {
+          "sharpe": 0.14,
+          "fitness": 0.03,
+          "returns": 0.0061,
+          "turnover": 0.0337,
+          "drawdown": 0.1216,
+          "margin": 0.00036,
+          "subUniverseSharpe": 0.33
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.14
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.03
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Treat this as a sibling of the working-capital basin rather than a separate orthogonal family.",
+      "Avoid assuming extra overlays help a working single signal without evidence."
+    ],
+    "backfilled_from_journal": true
+  },
+  {
+    "timestamp": "2026-05-07T08:10:00+00:00",
+    "theme": "analyst-confidence-disagreement",
+    "mechanism_tag": "analyst_expectations_disagreement",
+    "mechanism_tags": [
+      "analyst_expectations_disagreement",
+      "sentiment_attention"
+    ],
+    "hypothesis": "Rising EPS expectations with lower estimate dispersion and supportive broker recommendations might predict better forward returns.",
+    "summary": "Backfilled from the research journal. The analyst expectations and disagreement line was valid but too weak to submit. Best alpha E5gVLQ2r reached sharpe 0.15, fitness 0.03, returns 0.0047, and turnover 0.0994.",
+    "expressions": [
+      "rank(add(ts_zscore(ts_delta(ts_backfill(anl4_qf_az_eps_mean,120),20),120), reverse(ts_zscore(ts_backfill(anl4_qf_az_dts_spe,120),120)), reverse(ts_zscore(ts_backfill(vec_avg(anl4_mark),120),120))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "E5gVLQ2r",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(ts_zscore(ts_delta(ts_backfill(anl4_qf_az_eps_mean,120),20),120), reverse(ts_zscore(ts_backfill(anl4_qf_az_dts_spe,120),120)), reverse(ts_zscore(ts_backfill(vec_avg(anl4_mark),120),120))))",
+        "metrics": {
+          "sharpe": 0.15,
+          "fitness": 0.03,
+          "returns": 0.0047,
+          "turnover": 0.0994,
+          "drawdown": 0.0573,
+          "margin": 9.5e-05,
+          "subUniverseSharpe": -0.09
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.15
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.03
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.06,
+            "value": -0.09
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Keep this family separate from raw sentiment and attention lines when evaluating orthogonality."
+    ],
+    "backfilled_from_journal": true
+  },
+  {
+    "timestamp": "2026-05-07T08:15:00+00:00",
+    "theme": "labor-cost-stickiness-employee-intensity",
+    "mechanism_tag": "labor_cost_stickiness",
+    "mechanism_tags": [
+      "labor_cost_stickiness"
+    ],
+    "hypothesis": "Rising labor intensity relative to sales may flag future margin pressure.",
+    "summary": "Backfilled from the research journal. This line was likely sign-wrong or using a poor proxy in the available data representation. Best alpha LLg5rm2e posted negative sharpe and failed sub-universe quality.",
+    "expressions": [
+      "rank(reverse(ts_delta(divide(ts_backfill(employee,252), add(abs(ts_backfill(sales,252)),1)),252)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "LLg5rm2e",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_delta(divide(ts_backfill(employee,252), add(abs(ts_backfill(sales,252)),1)),252)))",
+        "metrics": {
+          "sharpe": -0.11,
+          "fitness": -0.02,
+          "returns": -0.0051,
+          "turnover": 0.0321,
+          "drawdown": 0.1406,
+          "margin": -0.000321,
+          "subUniverseSharpe": -0.73
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.11
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.02
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.05,
+            "value": -0.73
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Do not treat this failed implementation as proof the broader mechanism is dead; treat it as an early bad proxy or sign choice."
+    ],
+    "backfilled_from_journal": true
+  },
+  {
+    "timestamp": "2026-05-07T08:20:00+00:00",
+    "theme": "profitability-accrual-quality-composites",
+    "mechanism_tag": "quality_profitability_composite",
+    "mechanism_tags": [
+      "quality_profitability_composite",
+      "model_feature_divergence"
+    ],
+    "hypothesis": "Combining model-derived profitability and accrual-quality factors might create a cleaner quality signal than the raw working-capital construction.",
+    "summary": "Backfilled from the research journal. These profitability and accrual composites were clearly worse than the raw working-capital family and likely over-compressed or sign-wrong in this construction. The tracked references were 88avXomz, akAVGjJO, and RR2APRxj.",
+    "expressions": [
+      "rank(add(zscore(mdl177_2_managementqualityfactor_ocfroi), zscore(mdl177_2_managementqualityfactor_noato), zscore(mdl177_2_managementqualityfactor_opmb), reverse(zscore(mdl177_v1_400_ttmaccu))))",
+      "rank(add(zscore(return_on_invested_capital_4), zscore(mdl177_2_managementqualityfactor_fcfroi), reverse(zscore(mdl177_v1_400_ttmaccu))))",
+      "rank(add(zscore(mdl177_2_managementqualityfactor_ocfmargin), zscore(mdl177_2_managementqualityfactor_noato), reverse(zscore(mdl177_earningsqualityfactor_ttmaccu_alt))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "88avXomz",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(mdl177_2_managementqualityfactor_ocfroi), zscore(mdl177_2_managementqualityfactor_noato), zscore(mdl177_2_managementqualityfactor_opmb), reverse(zscore(mdl177_v1_400_ttmaccu))))",
+        "metrics": {
+          "sharpe": -0.53,
+          "fitness": -0.33,
+          "returns": -0.0487,
+          "turnover": 0.0176,
+          "drawdown": 0.5294,
+          "margin": -0.005545,
+          "subUniverseSharpe": -0.3
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.53
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.33
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.23,
+            "value": -0.3
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "akAVGjJO",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(return_on_invested_capital_4), zscore(mdl177_2_managementqualityfactor_fcfroi), reverse(zscore(mdl177_v1_400_ttmaccu))))",
+        "metrics": {
+          "sharpe": -0.51,
+          "fitness": -0.33,
+          "returns": -0.0522,
+          "turnover": 0.0168,
+          "drawdown": 0.6074,
+          "margin": -0.006225,
+          "subUniverseSharpe": -0.16
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.51
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.33
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "RR2APRxj",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(mdl177_2_managementqualityfactor_ocfmargin), zscore(mdl177_2_managementqualityfactor_noato), reverse(zscore(mdl177_earningsqualityfactor_ttmaccu_alt))))",
+        "metrics": {
+          "sharpe": -0.87,
+          "fitness": -0.57,
+          "returns": -0.0544,
+          "turnover": 0.0178,
+          "drawdown": 0.4214,
+          "margin": -0.006119,
+          "subUniverseSharpe": -0.49
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.87
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.57
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.38,
+            "value": -0.49
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Treat this as explored and weak unless a materially different construction is proposed."
+    ],
+    "backfilled_from_journal": true
+  },
+  {
+    "timestamp": "2026-05-07T10:28:12+00:00",
+    "theme": "parallel-mechanism-search",
+    "hypothesis": "Stop polishing the cashflow-gated working-capital basin and run four independent mechanism branches in parallel: price-volume microstructure, options-implied dislocation, news or social sentiment drift, and mdl177 model divergence.",
+    "summary": "Implemented a new parallel mechanism search tool in lab.py and ran a four-branch live search in USA TOP3000 delay 1 decay 6 SUBINDUSTRY. The result supports the strategic pivot. The legacy working-capital family was not the best new frontier. The option-implied branch produced the clear winner: xAPlKn1n = rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63)) with sharpe 1.31, fitness 0.58, returns 0.0584, turnover 0.2963, concentrated weight PASS, and sub-universe sharpe 1.14 PASS. It clears the sharpe bar but still fails LOW_FITNESS, so the family has real edge but needs conditioning or normalization rather than abandonment. News or social sentiment was weaker but viable (best E5gm5LQG at sharpe 0.39, fitness 0.16). mdl177 divergence was dead on this first pass. The microstructure branch failed for a useful reason: the current mapper pulled invalid group-typed fields like currency, producing unit errors, which means the search tool successfully exposed where field selection needs to be made more type-aware.",
+    "expressions": [
+      "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63))",
+      "rank(add(zscore(ts_delta(ts_backfill(snt1_d1_dynamicfocusrank,252),252)), reverse(zscore(ts_std_dev(ts_backfill(snt1_cored1_score,252),252)))))",
+      "rank(add(zscore(ts_backfill(mdl177_2_5yearrelativevaluefactor_rel5ycfp,126)), reverse(zscore(ts_backfill(mdl177_2_5yearrelativevaluefactor_rel5ydivp,126)))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "xAPlKn1n",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63))",
+        "metrics": {
+          "sharpe": 1.31,
+          "fitness": 0.58,
+          "returns": 0.0584,
+          "turnover": 0.2963,
+          "drawdown": 0.1131,
+          "margin": 0.000394,
+          "subUniverseSharpe": 1.14
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.58
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "58aGZKOX",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,126),126),126))",
+        "metrics": {
+          "sharpe": 0.2,
+          "fitness": 0.04,
+          "returns": 0.0095,
+          "turnover": 0.2708,
+          "drawdown": 0.2137,
+          "margin": 7e-05,
+          "subUniverseSharpe": 0.42
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.2
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.04
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "E5gm5LQG",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_delta(ts_backfill(snt1_d1_dynamicfocusrank,252),252)), reverse(zscore(ts_std_dev(ts_backfill(snt1_cored1_score,252),252)))))",
+        "metrics": {
+          "sharpe": 0.39,
+          "fitness": 0.16,
+          "returns": 0.0205,
+          "turnover": 0.0866,
+          "drawdown": 0.098,
+          "margin": 0.000473,
+          "subUniverseSharpe": 0.38
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.39
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.16
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "MPKgMjoL",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(mdl177_2_5yearrelativevaluefactor_rel5ycfp,126)), reverse(zscore(ts_backfill(mdl177_2_5yearrelativevaluefactor_rel5ydivp,126)))))",
+        "metrics": {
+          "sharpe": -0.19,
+          "fitness": -0.04,
+          "returns": -0.0062,
+          "turnover": 0.0348,
+          "drawdown": 0.1094,
+          "margin": -0.000353,
+          "subUniverseSharpe": -0.27
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.19
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.04
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.08,
+            "value": -0.27
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Stress-test xAPlKn1n in easier settings next: USA TOP1000, TOP500, delay 0, and one non-USA region to see whether the mechanism generalizes or only barely survives in USA delay 1.",
+      "Make the branch mapper type-aware so price-volume or microstructure hypotheses prioritize price, returns, volume, adv, vwap, and range fields while excluding symbol or group-typed fields like currency.",
+      "Extend the option branch with term-structure and skew spreads rather than only single-field ts_delta, because the current winner shows genuine edge but still needs a fitness lift."
+    ],
+    "mechanism_tag": "multi_mechanism_parallel_search",
+    "mechanism_tags": [
+      "options_iv_momentum",
+      "microstructure_institutional_flow",
+      "sentiment_attention",
+      "model_feature_divergence"
+    ]
+  },
+  {
+    "timestamp": "2026-05-07T11:50:11+00:00",
+    "theme": "options-smoothing-search",
+    "hypothesis": "The top options alpha xAPlKn1n is fitness-limited mainly by turnover, so the cheapest next win is to smooth the existing implied-volatility momentum family before trying harder multi-leg constructions. In parallel, seed a few mechanistically different options structures so we have fallback candidates if the bare put-IV family is crowded.",
+    "summary": "Pulled metadata first and confirmed implied_volatility_put_10 means at-the-money put implied volatility with 10 calendar days to expiration, so the suffix is tenor, not moneyness. Then ran a focused ten-expression batch at decay 10 and decay 15: six smoothing variants around rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63)) plus four diversification seeds covering put-call skew, put term structure, IV-versus-realized-vol spread, and the built-in mean-skew field. The main thesis was correct but only partially: smoothing mechanically cut turnover from the original ~0.30 down to ~0.10-0.13, but it also bled away too much Sharpe, so the best fitness only rose to 0.65 instead of clearing 1.0. Best result in the round was gJRr7dQJ = rank(ts_mean(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10)) at decay 15 with sharpe 1.06, fitness 0.65, returns 0.0473, turnover 0.1034, and sub-universe sharpe 1.01 PASS. A close second was LLg8xNQm = rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10)) at decay 10 with sharpe 1.06, fitness 0.64, returns 0.0466, turnover 0.1283, and sub-universe sharpe 0.88 PASS. The raw family with higher decay alone only reached fitness 0.60. Dropping the outer ts_zscore or lengthening the inner delta to 126 hurt badly. On diversification, put term structure had weak but positive edge, while put-call skew and mean-skew momentum were poor and often failed sub-universe quality. The IV-versus-realized-vol gap line did not finish cleanly in this round because of transport or simulation timeout noise, so it remains unresolved rather than disproven.",
+    "expressions": [
+      "rank(ts_mean(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10))",
+      "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10))",
+      "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63))",
+      "rank(ts_zscore(ts_delta(ts_backfill(subtract(implied_volatility_put_10, implied_volatility_put_120),63),63),63))",
+      "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_mean_skew_30,63),63),63))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "gJRr7dQJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_mean(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10))",
+        "metrics": {
+          "sharpe": 1.06,
+          "fitness": 0.65,
+          "returns": 0.0473,
+          "turnover": 0.1034,
+          "drawdown": 0.0951,
+          "margin": 0.000915,
+          "subUniverseSharpe": 1.01
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.06
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.65
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLg8xNQm",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),10))",
+        "metrics": {
+          "sharpe": 1.06,
+          "fitness": 0.64,
+          "returns": 0.0466,
+          "turnover": 0.1283,
+          "drawdown": 0.11,
+          "margin": 0.000727,
+          "subUniverseSharpe": 0.88
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.06
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.64
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "j29VQm09",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63))",
+        "metrics": {
+          "sharpe": 1.19,
+          "fitness": 0.6,
+          "returns": 0.0549,
+          "turnover": 0.2196,
+          "drawdown": 0.1227,
+          "margin": 0.0005,
+          "subUniverseSharpe": 1.03
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.19
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.6
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "P0wPez27",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_zscore(ts_delta(ts_backfill(subtract(implied_volatility_put_10, implied_volatility_put_120),63),63),63))",
+        "metrics": {
+          "sharpe": 0.65,
+          "fitness": 0.2,
+          "returns": 0.0242,
+          "turnover": 0.2535,
+          "drawdown": 0.1107,
+          "margin": 0.000191,
+          "subUniverseSharpe": 0.35
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.65
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.2
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "E5gmYLz0",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_zscore(ts_delta(ts_backfill(implied_volatility_mean_skew_30,63),63),63))",
+        "metrics": {
+          "sharpe": 0.49,
+          "fitness": 0.14,
+          "returns": 0.018,
+          "turnover": 0.2317,
+          "drawdown": 0.0918,
+          "margin": 0.000156,
+          "subUniverseSharpe": -0.08
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.49
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.14
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.21,
+            "value": -0.08
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Search for transforms that preserve more Sharpe while keeping turnover near 0.10, rather than smoothing harder; pure smoothing helped turnover but did not solve the real tradeoff.",
+      "Retry the IV-versus-realized-vol gap line by itself because this round did not produce a clean signal read; the missing result was operationally noisy, not decisively bad.",
+      "Only after a stronger fitness candidate appears, stress-test TOP1000, TOP500, delay 0, and one non-USA region; the current best smoothed variants are still too far below the 1.0 fitness bar to justify that as the next priority."
+    ],
+    "mechanism_tag": "options_iv_momentum",
+    "mechanism_tags": [
+      "options_iv_momentum"
+    ]
+  },
+  {
+    "timestamp": "2026-05-07T17:39:42+00:00",
+    "theme": "options-linear-smoother-search",
+    "hypothesis": "The put-IV momentum family still has room if the smoothing is made more local and the simulation decay is allowed to carry more of the slowness. Instead of broader diversification, search the narrow neighborhood around ts_decay_linear wrappers and the decay setting interaction.",
+    "summary": "Restarted the previously stuck search with bounded global polling and reran the options family through direct workspace Python helpers rather than waiting on an untracked terminal run. The useful finding is that short linear smoothing beats simple moving averages. First pass found N1gLvM2w = rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),5)) at decay 15 with sharpe 1.09, fitness 0.68, returns 0.0498, turnover 0.1289, and sub-universe sharpe 0.98. A tighter follow-up around the same family found an even better point: YP28GV9q = rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7)) at decay 20 with sharpe 1.16, fitness 0.76, returns 0.0534, turnover 0.1054, margin 0.001014, and sub-universe sharpe 1.06 PASS. This is still below the Brain bars, but it is a real frontier improvement over the earlier 0.65 ceiling and confirms the local search direction: moderate linear smoothing plus higher simulation decay preserves more Sharpe than plain averaging while still cutting turnover materially. The unresolved branch is lin7_decay10, which timed out at low progress and should be treated as unknown rather than bad. Several broader attempts also hit CONCURRENT_SIMULATION_LIMIT_EXCEEDED, so the practical lesson is to keep these local sweeps small and bounded.",
+    "expressions": [
+      "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))",
+      "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),5))",
+      "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),3))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "YP28GV9q",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))",
+        "metrics": {
+          "sharpe": 1.16,
+          "fitness": 0.76,
+          "returns": 0.0534,
+          "turnover": 0.1054,
+          "drawdown": 0.1016,
+          "margin": 0.001014,
+          "subUniverseSharpe": 1.06
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.16
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.76
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "rKJ9vPpJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))",
+        "metrics": {
+          "sharpe": 1.09,
+          "fitness": 0.69,
+          "returns": 0.0494,
+          "turnover": 0.1201,
+          "drawdown": 0.1079,
+          "margin": 0.000822,
+          "subUniverseSharpe": 0.98
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.09
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.69
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "N1gLvM2w",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),5))",
+        "metrics": {
+          "sharpe": 1.09,
+          "fitness": 0.68,
+          "returns": 0.0498,
+          "turnover": 0.1289,
+          "drawdown": 0.1113,
+          "margin": 0.000772,
+          "subUniverseSharpe": 0.98
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.09
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.68
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "gJRXE1MJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),3))",
+        "metrics": {
+          "sharpe": 1.11,
+          "fitness": 0.67,
+          "returns": 0.0512,
+          "turnover": 0.1422,
+          "drawdown": 0.1148,
+          "margin": 0.00072,
+          "subUniverseSharpe": 1.0
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.11
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.67
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Retry lin7 at decay 10 by itself because it timed out before producing an alpha and the family is now strong enough that the missing point is worth resolving.",
+      "Search one step outward from the new best using nearby linear windows and maybe one light normalization tweak, but keep batches tiny to avoid the concurrent simulation limit.",
+      "Only after another fitness lift, run easier-universe stress tests; YP28GV9q is the new anchor, but 0.76 fitness is still too far from 1.0 to justify submission attempts."
+    ],
+    "mechanism_tag": "options_iv_momentum",
+    "mechanism_tags": [
+      "options_iv_momentum"
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T02:55:56+00:00",
+    "theme": "options-tsrank-breakthrough",
+    "hypothesis": "The put-IV family likely needs a wrapper change rather than more smoothing. After the local linear-smoother frontier stabilized, the highest-EV move was applying ts_rank over the smoothed signal, then stress-testing the winner in smaller universes while self-correlation remains unresolved.",
+    "summary": "Resumed the interrupted task after fixing MCP timeout behavior and resolved the remaining local unknowns first. The previously timed-out lin7_decay10 point completed cleanly and was not a hidden winner: LLgEJ10L reached only sharpe 1.06 and fitness 0.60, clearly worse than the decay-20 frontier. YP28GV9q still has SELF_CORRELATION pending, so the crowdedness verdict on the family is not settled yet. The big move came from the Priority 2B wrapper sweep: ts_rank over the best smoothed signal materially lifted quality. The clear winner was QP2NPG6X = ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 126) with sharpe 1.45, fitness 1.03, returns 0.0633, turnover 0.1128, no blocking checks, and only SELF_CORRELATION pending. That means the expression is already above the usual IS bars in USA TOP3000 and is blocked only by the unresolved crowding check. The sister variants were also strong: RR2lRmn1 at ts_rank window 252 reached fitness 0.95 and QP2NP9gW at ts_rank window 63 reached fitness 0.93. Universe stress tests did not produce an easier shipping path: TOP500 and TOP1000 versions remained below bar, with the best smaller-universe point zqP2qeGK in TOP500 reaching sharpe 1.07 and fitness 0.87. So the real submission path is no longer 'smaller universe rescue'; it is waiting on or surviving SELF_CORRELATION for the TOP3000 ts_rank-126 winner.",
+    "expressions": [
+      "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 126)",
+      "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 252)",
+      "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 63)",
+      "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "QP2NPG6X",
+        "status": "ACTIVE",
+        "stage": "OS",
+        "grade": "AVERAGE",
+        "expression": "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 126)",
+        "metrics": {
+          "sharpe": 1.45,
+          "fitness": 1.03,
+          "returns": 0.0633,
+          "turnover": 0.1128,
+          "drawdown": 0.0799,
+          "margin": 0.001122,
+          "subUniverseSharpe": 0.95
+        },
+        "blockingChecks": [],
+        "pendingChecks": [],
+        "submittable": true
+      },
+      {
+        "alphaId": "RR2lRmn1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 252)",
+        "metrics": {
+          "sharpe": 1.37,
+          "fitness": 0.95,
+          "returns": 0.0598,
+          "turnover": 0.1122,
+          "drawdown": 0.075,
+          "margin": 0.001066,
+          "subUniverseSharpe": 1.07
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.95
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "QP2NP9gW",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 63)",
+        "metrics": {
+          "sharpe": 1.38,
+          "fitness": 0.93,
+          "returns": 0.0572,
+          "turnover": 0.1175,
+          "drawdown": 0.0446,
+          "margin": 0.000974,
+          "subUniverseSharpe": 0.93
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.93
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "YP28GV9q",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))",
+        "metrics": {
+          "sharpe": 1.16,
+          "fitness": 0.76,
+          "returns": 0.0534,
+          "turnover": 0.1054,
+          "drawdown": 0.1016,
+          "margin": 0.001014,
+          "subUniverseSharpe": 1.06
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.16
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.76
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLgEJ10L",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7))",
+        "metrics": {
+          "sharpe": 1.06,
+          "fitness": 0.6,
+          "returns": 0.0466,
+          "turnover": 0.1434,
+          "drawdown": 0.1161,
+          "margin": 0.000649,
+          "subUniverseSharpe": 0.87
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.06
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.6
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "zqP2qeGK",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 126)",
+        "metrics": {
+          "sharpe": 1.07,
+          "fitness": 0.87,
+          "returns": 0.0868,
+          "turnover": 0.1327,
+          "drawdown": 0.1523,
+          "margin": 0.001308,
+          "subUniverseSharpe": 0.89
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.07
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.87
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Re-check SELF_CORRELATION on QP2NPG6X and YP28GV9q later today; if QP2NPG6X clears, submit that alpha directly because it already passes the performance bars.",
+      "If SELF_CORRELATION fails on QP2NPG6X, treat the plain put-IV family as crowded and pivot back to a more orthogonal mechanism rather than continuing to polish this basin.",
+      "If waiting time allows, a tiny follow-up around the winner could test nearby ts_rank windows around 126 such as 105 and 147, but only after or alongside the self-correlation re-check, not instead of it."
+    ],
+    "mechanism_tag": "options_iv_momentum",
+    "mechanism_tags": [
+      "options_iv_momentum"
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T09:10:51+00:00",
+    "theme": "tooling-ast-novelty-shadow",
+    "hypothesis": "AST-based structural similarity should cluster options-IV families more cleanly than token and sequence overlap, while keeping live ranking behavior unchanged until validated.",
+    "summary": "Added a deterministic Brain-expression parser, AST largest-common-subtree similarity, shadow AST fields in analyze_expression_novelty, and a validate_alpha_novelty_shadow tool for log-only checks. Validation on 14 unique logged expressions parsed 14 of 14 successfully. QP2NPG6X clustered first with RR2lRmn1 and QP2NP9gW at AST similarity 1.0, with nearby wrapper siblings such as LLg8xNQm and YP28GV9q at 0.9. Non-options references such as E5gm5LQG and MPKgMjoL stayed materially lower at roughly 0.0909 to 0.125. The legacy novelty score remains the active ranking metric; AST is shadow-only for now. One validation target remains pending until Step 2 backfills the machine-readable store with early working-capital history.",
+    "expressions": [],
+    "alphas": [],
+    "followUps": [
+      "Add mechanism_tag to experiment entries and backfill the existing experiment store, including early working-capital history that currently exists only in the journal.",
+      "Reuse the new parser for deterministic factor interpretation before considering any ranking change from legacy novelty to AST-informed novelty."
+    ],
+    "mechanism_tag": "research_infrastructure",
+    "mechanism_tags": [
+      "research_infrastructure"
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T09:42:08+00:00",
+    "theme": "tooling-mechanism-tag-backfill",
+    "mechanism_tag": "research_infrastructure",
+    "mechanism_tags": [
+      "research_infrastructure"
+    ],
+    "hypothesis": "Adding mechanism tags and backfilling journal-only experiments should close the remaining Step 1 validation gap and make orthogonality checks queryable by mechanism family.",
+    "summary": "Added mechanism_tag support to experiment logging and listing, surfaced mechanism tag metadata in novelty comparisons, and backfilled the machine-readable store with the missing 2026-05-07 journal-only families using exact Brain expressions fetched from their alpha IDs. The working-capital family is now queryable with a mechanism_tag filter, and AST validation now sees wpn9PlEd and YP2xJlPR as close siblings at 0.96 while QP2NPG6X remains clustered inside options-IV momentum instead.",
+    "expressions": [],
+    "alphas": [],
+    "followUps": [
+      "Reuse the parser for deterministic factor interpretation in Step 3.",
+      "Use mechanism-tag plus AST distance together when screening the next microstructure or institutional-flow basin against QP2NPG6X."
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T09:52:49+00:00",
+    "theme": "tooling-deterministic-factor-interpretation",
+    "mechanism_tag": "research_infrastructure",
+    "mechanism_tags": [
+      "research_infrastructure"
+    ],
+    "hypothesis": "The AST parser can be reused to generate deterministic plain-English interpretations of Brain expressions, which should make novelty review and experiment review more legible without introducing model calls or changing search behavior.",
+    "summary": "Added deterministic expression interpretation on top of the AST parser, preserved exact numeric literals for explanation while keeping number matching structural for AST similarity, and exposed interpretation objects in analyze_expression_novelty, validate_alpha_novelty_shadow, and list_alpha_experiments outputs. Validation confirmed that both QP2NPG6X and the backfilled working-capital family now return stable summaries, step lists, field lists, and function lists in novelty and review flows.",
+    "expressions": [],
+    "alphas": [],
+    "followUps": [
+      "Use mechanism-tag plus AST similarity plus deterministic interpretation when screening the next microstructure or institutional-flow basin against QP2NPG6X.",
+      "Keep consistency scoring opt-in later rather than inserting it into every mapping call."
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T10:22:21+00:00",
+    "theme": "microstructure-return-volume-correlation-basin",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Cross-sectional rank of reversed correlation between returns and 1-day volume change is an institutional-flow proxy that is structurally orthogonal to the shipped options-IV family; raw 40- and 60-day windows appear to be the healthy basin, while outer ts_rank normalization degrades the signal.",
+    "summary": "Orthogonality screen stayed far from QP2NPG6X and clustered only with this new microstructure branch. Tested seven expressions sequentially. Ranking: LLgz6v5L rank(reverse(ts_corr(returns, ts_delta(volume,1), 40))) Sharpe 0.82 Fitness 0.46 Turnover 0.0914 Sub-universe Sharpe 1.11; blozPjLM rank(reverse(ts_corr(returns, ts_delta(volume,1), 60))) Sharpe 0.81 Fitness 0.45 Turnover 0.0693 Sub-universe Sharpe 1.15; xAPGQdrJ rank(reverse(ts_corr(returns, ts_delta(volume,1), 20))) Sharpe 0.66 Fitness 0.30 Sub-universe Sharpe 0.53; 1YaKmVWk rank(reverse(ts_corr(returns, ts_delta(divide(volume,adv20),1), 20))) Sharpe 0.67 Fitness 0.31 but weaker than raw 40/60; pwVGEQ6b rank(ts_corr(returns, ts_delta(volume,1), 20)) had wrong sign and failed LOW_SHARPE -0.66, LOW_FITNESS -0.30, LOW_SUB_UNIVERSE_SHARPE -0.53. Wrapper follow-ups both degraded: 78amKQR2 ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)), 126) Sharpe 0.28 Fitness 0.08 Sub-universe Sharpe 0.40; YP2z2jOq ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)), 126) Sharpe 0.31 Fitness 0.09 Sub-universe Sharpe 0.62. Conclusion: keep the raw reversed 40/60-day basin; do not add outer ts_rank here.",
+    "expressions": [
+      "rank(ts_corr(returns, ts_delta(volume,1), 20))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 20)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)))",
+      "rank(reverse(ts_corr(returns, ts_delta(divide(volume,adv20),1), 20)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)))",
+      "ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)), 126)",
+      "ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)), 126)"
+    ],
+    "alphas": [
+      {
+        "alphaId": "pwVGEQ6b",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_corr(returns, ts_delta(volume,1), 20))",
+        "metrics": {
+          "sharpe": -0.66,
+          "fitness": -0.3,
+          "returns": -0.0308,
+          "turnover": 0.1455,
+          "drawdown": 0.2542,
+          "margin": -0.000423,
+          "subUniverseSharpe": -0.53
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.66
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.3
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.29,
+            "value": -0.53
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "xAPGQdrJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 20)))",
+        "metrics": {
+          "sharpe": 0.66,
+          "fitness": 0.3,
+          "returns": 0.0308,
+          "turnover": 0.1455,
+          "drawdown": 0.1299,
+          "margin": 0.000423,
+          "subUniverseSharpe": 0.53
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.66
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.3
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLgz6v5L",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)))",
+        "metrics": {
+          "sharpe": 0.82,
+          "fitness": 0.46,
+          "returns": 0.0388,
+          "turnover": 0.0914,
+          "drawdown": 0.1446,
+          "margin": 0.00085,
+          "subUniverseSharpe": 1.11
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.82
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.46
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "1YaKmVWk",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(divide(volume,adv20),1), 20)))",
+        "metrics": {
+          "sharpe": 0.67,
+          "fitness": 0.31,
+          "returns": 0.0304,
+          "turnover": 0.1464,
+          "drawdown": 0.1246,
+          "margin": 0.000415,
+          "subUniverseSharpe": 0.52
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.67
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.31
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "blozPjLM",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)))",
+        "metrics": {
+          "sharpe": 0.81,
+          "fitness": 0.45,
+          "returns": 0.0394,
+          "turnover": 0.0693,
+          "drawdown": 0.1751,
+          "margin": 0.001136,
+          "subUniverseSharpe": 1.15
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.81
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.45
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "78amKQR2",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)), 126)",
+        "metrics": {
+          "sharpe": 0.28,
+          "fitness": 0.08,
+          "returns": 0.0099,
+          "turnover": 0.1109,
+          "drawdown": 0.0564,
+          "margin": 0.000179,
+          "subUniverseSharpe": 0.4
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.28
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.08
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "YP2z2jOq",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "ts_rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)), 126)",
+        "metrics": {
+          "sharpe": 0.31,
+          "fitness": 0.09,
+          "returns": 0.0102,
+          "turnover": 0.0943,
+          "drawdown": 0.0526,
+          "margin": 0.000217,
+          "subUniverseSharpe": 0.62
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.31
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.09
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Branch from raw reversed 40- and 60-day seeds only.",
+      "Test adjacent robustness knobs before adding extra wrappers, starting with mild decay/window variants.",
+      "Avoid outer ts_rank on this basin unless a later branch materially improves raw Sharpe first."
+    ]
+  },
+  {
+    "timestamp": "2026-05-08T18:19:35+00:00",
+    "theme": "microstructure-lookback-sweep-and-volume-filter",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "The healthy microstructure basin is the reversed correlation between returns and short-horizon volume change; robustness should come from the correlation window rather than from lengthening the volume-delta lag, and a simple high-volume regime filter may improve the raw 40/60-day seeds without adding factor complexity.",
+    "summary": "Completed a six-cell lookback sweep by combining prior n=1 anchors with three new n=5 runs. The n=1 branch remains the signal core: LLgz6v5L rank(reverse(ts_corr(returns, ts_delta(volume,1), 40))) still leads on fitness at 0.46 with Sharpe 0.82 and Sub-universe Sharpe 1.11, while blozPjLM rank(reverse(ts_corr(returns, ts_delta(volume,1), 60))) stays close at Fitness 0.45, Sharpe 0.81, Sub-universe Sharpe 1.15. The new n=5 variants were all weaker: KPXQOVr8 20d reached Sharpe 0.66 Fitness 0.29 Sub-universe Sharpe 0.40; QP2g3Adg 40d reached Sharpe 0.69 Fitness 0.35 Sub-universe Sharpe 0.58; zqP08qa8 60d reached Sharpe 0.63 Fitness 0.31 Sub-universe Sharpe 0.74. That means lengthening the volume-delta lag does not improve this basin. Regime filtering with volume > adv20 also failed to create a new frontier: GrMxb6G3 on the 40d seed was essentially lateral at Sharpe 0.83 Fitness 0.46 Sub-universe Sharpe 1.02 with lower turnover 0.0864, while Xg2ebpE1 on the 60d seed slipped to Sharpe 0.77 Fitness 0.42 Sub-universe Sharpe 1.05. Conclusion: keep the raw reversed ts_corr core with ts_delta(volume,1) and 40/60-day windows; do not lengthen the lag and do not add the simple volume-spike trade_when filter at this stage. Housekeeping: the local store now marks QP2NPG6X as ACTIVE/OS and novelty tie-breaks surface active shipped alphas first in avoidance matches.",
+    "expressions": [
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 20)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,5), 20)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,5), 40)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,5), 60)))",
+      "trade_when(greater(volume, adv20), rank(reverse(ts_corr(returns, ts_delta(volume,1), 40))), -1)",
+      "trade_when(greater(volume, adv20), rank(reverse(ts_corr(returns, ts_delta(volume,1), 60))), -1)"
+    ],
+    "alphas": [
+      {
+        "alphaId": "xAPGQdrJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 20)))",
+        "metrics": {
+          "sharpe": 0.66,
+          "fitness": 0.3,
+          "returns": 0.0308,
+          "turnover": 0.1455,
+          "drawdown": 0.1299,
+          "margin": 0.000423,
+          "subUniverseSharpe": 0.53
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.66
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.3
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLgz6v5L",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 40)))",
+        "metrics": {
+          "sharpe": 0.82,
+          "fitness": 0.46,
+          "returns": 0.0388,
+          "turnover": 0.0914,
+          "drawdown": 0.1446,
+          "margin": 0.00085,
+          "subUniverseSharpe": 1.11
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.82
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.46
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "blozPjLM",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 60)))",
+        "metrics": {
+          "sharpe": 0.81,
+          "fitness": 0.45,
+          "returns": 0.0394,
+          "turnover": 0.0693,
+          "drawdown": 0.1751,
+          "margin": 0.001136,
+          "subUniverseSharpe": 1.15
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.81
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.45
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "KPXQOVr8",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,5), 20)))",
+        "metrics": {
+          "sharpe": 0.66,
+          "fitness": 0.29,
+          "returns": 0.0298,
+          "turnover": 0.1565,
+          "drawdown": 0.1011,
+          "margin": 0.000381,
+          "subUniverseSharpe": 0.4
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.66
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.29
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "QP2g3Adg",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,5), 40)))",
+        "metrics": {
+          "sharpe": 0.69,
+          "fitness": 0.35,
+          "returns": 0.0327,
+          "turnover": 0.0984,
+          "drawdown": 0.1426,
+          "margin": 0.000665,
+          "subUniverseSharpe": 0.58
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.69
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.35
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "zqP08qa8",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,5), 60)))",
+        "metrics": {
+          "sharpe": 0.63,
+          "fitness": 0.31,
+          "returns": 0.0306,
+          "turnover": 0.0743,
+          "drawdown": 0.1653,
+          "margin": 0.000825,
+          "subUniverseSharpe": 0.74
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.63
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.31
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "GrMxb6G3",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "trade_when(greater(volume, adv20), rank(reverse(ts_corr(returns, ts_delta(volume,1), 40))), -1)",
+        "metrics": {
+          "sharpe": 0.83,
+          "fitness": 0.46,
+          "returns": 0.0389,
+          "turnover": 0.0864,
+          "drawdown": 0.1463,
+          "margin": 0.0009,
+          "subUniverseSharpe": 1.02
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.83
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.46
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "Xg2ebpE1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "trade_when(greater(volume, adv20), rank(reverse(ts_corr(returns, ts_delta(volume,1), 60))), -1)",
+        "metrics": {
+          "sharpe": 0.77,
+          "fitness": 0.42,
+          "returns": 0.0368,
+          "turnover": 0.0663,
+          "drawdown": 0.1792,
+          "margin": 0.00111,
+          "subUniverseSharpe": 1.05
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.77
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.42
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Branch next only from the raw n=1, 40- and 60-day seeds.",
+      "Prefer mild local robustness checks such as decay or nearby correlation-window shifts before any new wrapper or extra leg.",
+      "Keep using QP2NPG6X as the primary avoidance target when novelty ties occur."
+    ]
+  },
+  {
+    "timestamp": "2026-05-09T02:37:11+00:00",
+    "theme": "microstructure-window-decay-range-followup",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "The best next refinement on the healthy return-volume-correlation basin should come from nearby window tuning rather than longer lag or extra complexity; mild decay may help smooth the raw winner, and a separate intraday-range proxy should be tested as an adjacent microstructure basin rather than blended in.",
+    "summary": "Completed the full nearby-window, mild-decay, and adjacent-range follow-up using exact recent alpha ids already present on the platform. The nearby-window sweep produced the best result of the pass: 9qakgoRq rank(reverse(ts_corr(returns, ts_delta(volume,1), 50))) reached Sharpe 0.91, Fitness 0.54, Turnover 0.079, Sub-universe Sharpe 1.16, improving on the previously logged 40/60-day raw leaders. The 30-day neighbor rKJ8Qpz9 stayed healthy at Sharpe 0.81, Fitness 0.45, Sub-universe Sharpe 1.10, while the 80-day branch vRePazQz weakened to Sharpe 0.70, Fitness 0.37, Sub-universe Sharpe 0.92. Mild decay overlays did not help: rKJ8QPJj on the 40-day seed reached Sharpe 0.79, Fitness 0.43, Sub-universe Sharpe 1.07 and E5gxoVZ1 on the 60-day seed reached Sharpe 0.77, Fitness 0.42, Sub-universe Sharpe 1.12, both worse than the raw parents. The adjacent range basin was mixed but not a new leader: QP26mpb5 rank(reverse(ts_corr(returns, divide(subtract(high, low), close), 60))) reached Sharpe 0.77, Fitness 0.43, Sub-universe Sharpe 0.54, while mLrQe059 at the 40-day window reached Sharpe 0.66, Fitness 0.34, Sub-universe Sharpe 0.36. Conclusion: the signal core advances to the raw volume-delta-1 correlation at 50 days; keep range as a separate secondary basin, and do not add mild decay to the raw winner at this stage.",
+    "expressions": [
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 30)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 50)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 80)))",
+      "rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 40)), 3))",
+      "rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 60)), 3))",
+      "rank(reverse(ts_corr(returns, divide(subtract(high, low), close), 40)))",
+      "rank(reverse(ts_corr(returns, divide(subtract(high, low), close), 60)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "rKJ8Qpz9",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 30)))",
+        "metrics": {
+          "sharpe": 0.81,
+          "fitness": 0.45,
+          "returns": 0.0381,
+          "turnover": 0.1105,
+          "drawdown": 0.1128,
+          "margin": 0.000689,
+          "subUniverseSharpe": 1.1
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.81
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.45
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "9qakgoRq",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 50)))",
+        "metrics": {
+          "sharpe": 0.91,
+          "fitness": 0.54,
+          "returns": 0.0435,
+          "turnover": 0.079,
+          "drawdown": 0.1516,
+          "margin": 0.001101,
+          "subUniverseSharpe": 1.16
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.91
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.54
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "vRePazQz",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 80)))",
+        "metrics": {
+          "sharpe": 0.7,
+          "fitness": 0.37,
+          "returns": 0.0355,
+          "turnover": 0.057,
+          "drawdown": 0.1907,
+          "margin": 0.001247,
+          "subUniverseSharpe": 0.92
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.7
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.37
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "rKJ8QPJj",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 40)), 3))",
+        "metrics": {
+          "sharpe": 0.79,
+          "fitness": 0.43,
+          "returns": 0.0374,
+          "turnover": 0.0844,
+          "drawdown": 0.1453,
+          "margin": 0.000888,
+          "subUniverseSharpe": 1.07
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.79
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.43
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "E5gxoVZ1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 60)), 3))",
+        "metrics": {
+          "sharpe": 0.77,
+          "fitness": 0.42,
+          "returns": 0.0373,
+          "turnover": 0.0643,
+          "drawdown": 0.1766,
+          "margin": 0.00116,
+          "subUniverseSharpe": 1.12
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.77
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.42
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "mLrQe059",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, divide(subtract(high, low), close), 40)))",
+        "metrics": {
+          "sharpe": 0.66,
+          "fitness": 0.34,
+          "returns": 0.0335,
+          "turnover": 0.1002,
+          "drawdown": 0.0819,
+          "margin": 0.000669,
+          "subUniverseSharpe": 0.36
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.66
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.34
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "QP26mpb5",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, divide(subtract(high, low), close), 60)))",
+        "metrics": {
+          "sharpe": 0.77,
+          "fitness": 0.43,
+          "returns": 0.0395,
+          "turnover": 0.0768,
+          "drawdown": 0.1055,
+          "margin": 0.001028,
+          "subUniverseSharpe": 0.54
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.77
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.43
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Promote the raw 50-day volume-delta-1 correlation seed to the top of the microstructure branch.",
+      "Test only tiny local follow-ups around the 50-day winner before adding any wrapper or filter.",
+      "Keep the intraday-range correlation branch separate from the volume-flow branch when screening novelty and follow-up searches."
+    ]
+  },
+  {
+    "timestamp": "2026-05-09T02:46:23+00:00",
+    "theme": "microstructure-50d-local-stoploss-sweep",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "If the raw 50-day volume-delta-1 correlation seed still has meaningful local headroom, then very nearby windows should either lift it toward a materially stronger frontier or reveal that the branch is already near its local ceiling.",
+    "summary": "Ran the bounded 45/55/70 follow-up around the raw 50-day winner. 55 days improved slightly over the 50-day seed: O0bgpLP7 rank(reverse(ts_corr(returns, ts_delta(volume,1), 55))) reached Sharpe 0.92, Fitness 0.55, Turnover 0.0741, Sub-universe Sharpe 1.14. The 45-day neighbor 1Ya070WQ stayed close at Sharpe 0.89, Fitness 0.52, Sub-universe Sharpe 1.10, while the 70-day branch leQ1lpKx weakened to Sharpe 0.68, Fitness 0.35, Sub-universe Sharpe 0.98. Conclusion: there is a small local ridge around 50 to 55 days, but after three tightly targeted probes the branch still sits well below the practical continuation threshold of roughly Sharpe 1.0 and Fitness 0.65. Treat O0bgpLP7 as the local best point in this basin, but pause deeper iteration here and pivot to another orthogonal family unless a very specific high-conviction microstructure idea emerges.",
+    "expressions": [
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 45)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 55)))",
+      "rank(reverse(ts_corr(returns, ts_delta(volume,1), 70)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "1Ya070WQ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 45)))",
+        "metrics": {
+          "sharpe": 0.89,
+          "fitness": 0.52,
+          "returns": 0.0427,
+          "turnover": 0.0847,
+          "drawdown": 0.1423,
+          "margin": 0.001009,
+          "subUniverseSharpe": 1.1
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.89
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.52
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "O0bgpLP7",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 0.92,
+          "fitness": 0.55,
+          "returns": 0.0443,
+          "turnover": 0.0741,
+          "drawdown": 0.1622,
+          "margin": 0.001195,
+          "subUniverseSharpe": 1.14
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.92
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.55
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "leQ1lpKx",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(returns, ts_delta(volume,1), 70)))",
+        "metrics": {
+          "sharpe": 0.68,
+          "fitness": 0.35,
+          "returns": 0.034,
+          "turnover": 0.0618,
+          "drawdown": 0.187,
+          "margin": 0.0011,
+          "subUniverseSharpe": 0.98
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.68
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.35
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Keep O0bgpLP7 as the local best reference point for this basin.",
+      "Do not continue broad tuning on this return-volume-correlation branch without a very specific new mechanism idea.",
+      "Pivot the main search budget to a different orthogonal mechanism family."
+    ]
+  },
+  {
+    "timestamp": "2026-05-11T10:09:11+00:00",
+    "theme": "sentiment-attention-orthogonal-pivot",
+    "mechanism_tag": "sentiment_attention",
+    "mechanism_tags": [
+      "sentiment_attention"
+    ],
+    "hypothesis": "Use analyst sentiment-attention and social-buzz dynamics as a fresh orthogonal family against the shipped options-IV line and the local-best microstructure line. The working assumption was that combining attention change with sentiment level or stability could open a second basin without drifting back into the prior options or microstructure mechanisms.",
+    "summary": "Ran a fresh six-seed sentiment-attention pivot using AST novelty control against QP2NPG6X and O0bgpLP7. One seed was dropped before simulation because it was a structural near-duplicate of the earlier parallel-mechanism sentiment line. The five bounded live simulations were mixed but mostly weak: sa2/A1nj9g2e sharpe -0.55 fitness -0.24, sa3/XgkmGRjl sharpe -0.16 fitness -0.03, sa4/YPNL63a6 sharpe -0.10 fitness -0.01 with very high turnover 0.6511, sa6/qMn915bV sharpe -0.36 fitness -0.16, and the best result sa5/e7nkpYwE sharpe 0.45 fitness 0.09 returns 0.0148 turnover 0.3430. AST similarity to QP2NPG6X and O0bgpLP7 stayed low for the new seeds, so the weak performance looks like a bad basin or poor sign/conditioning rather than novelty contamination. Treat this exact sentiment-attention construction as non-competitive for now.",
+    "expressions": [
+      "rank(add(zscore(ts_delta(ts_backfill(snt1_d1_netearningsrevision,126),21)), zscore(ts_backfill(snt1_d1_uptargetpercent,63)), reverse(zscore(ts_backfill(snt1_d1_downtargetpercent,63)))))",
+      "rank(add(zscore(ts_backfill(snt1_d1_netrecpercent,63)), zscore(ts_delta(ts_backfill(snt1_d1_dynamicfocusrank,126),10))))",
+      "rank(add(zscore(ts_backfill(scl12_sentiment_fast_d1,20)), zscore(ts_delta(ts_backfill(scl12_buzz_fast_d1,20),5))))",
+      "rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20)))))",
+      "rank(add(zscore(ts_backfill(snt1_d1_fundamentalfocusrank,126)), zscore(ts_backfill(snt1_d1_longtermepsgrowthest,126)), reverse(zscore(ts_backfill(snt1_d1_dtstsespe,126)))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "A1nj9g2e",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_delta(ts_backfill(snt1_d1_netearningsrevision,126),21)), zscore(ts_backfill(snt1_d1_uptargetpercent,63)), reverse(zscore(ts_backfill(snt1_d1_downtargetpercent,63)))))",
+        "metrics": {
+          "sharpe": -0.55,
+          "fitness": -0.24,
+          "returns": -0.03,
+          "turnover": 0.1599,
+          "drawdown": 0.2415,
+          "margin": -0.000376,
+          "subUniverseSharpe": -0.2
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.55
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.24
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "XgkmGRjl",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(snt1_d1_netrecpercent,63)), zscore(ts_delta(ts_backfill(snt1_d1_dynamicfocusrank,126),10))))",
+        "metrics": {
+          "sharpe": -0.16,
+          "fitness": -0.03,
+          "returns": -0.0067,
+          "turnover": 0.1556,
+          "drawdown": 0.1205,
+          "margin": -8.7e-05,
+          "subUniverseSharpe": 0.01
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.16
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.03
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "YPNL63a6",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(scl12_sentiment_fast_d1,20)), zscore(ts_delta(ts_backfill(scl12_buzz_fast_d1,20),5))))",
+        "metrics": {
+          "sharpe": -0.1,
+          "fitness": -0.01,
+          "returns": -0.003,
+          "turnover": 0.6511,
+          "drawdown": 0.1194,
+          "margin": -9e-06,
+          "subUniverseSharpe": -0.83
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.1
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.01
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.04,
+            "value": -0.83
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "e7nkpYwE",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20)))))",
+        "metrics": {
+          "sharpe": 0.45,
+          "fitness": 0.09,
+          "returns": 0.0148,
+          "turnover": 0.343,
+          "drawdown": 0.0581,
+          "margin": 8.6e-05,
+          "subUniverseSharpe": -0.34
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.45
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.09
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.19,
+            "value": -0.34
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "qMn915bV",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(snt1_d1_fundamentalfocusrank,126)), zscore(ts_backfill(snt1_d1_longtermepsgrowthest,126)), reverse(zscore(ts_backfill(snt1_d1_dtstsespe,126)))))",
+        "metrics": {
+          "sharpe": -0.36,
+          "fitness": -0.16,
+          "returns": -0.0241,
+          "turnover": 0.0241,
+          "drawdown": 0.2809,
+          "margin": -0.001999,
+          "subUniverseSharpe": -0.05
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.36
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.16
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "If sentiment is revisited, test explicit sign-flipped or gated variants instead of more same-shape nearby blends.",
+      "Prefer a genuinely different orthogonal branch next, likely a cleaner model-feature divergence redesign or another unexplored family, rather than tuning this sentiment slice.",
+      "Use sa5 only as a weak reference point; its positive sharpe did not survive fitness or sub-universe quality."
+    ]
+  },
+  {
+    "timestamp": "2026-05-11T10:20:08+00:00",
+    "theme": "small-sentiment-rescue-then-model-probe",
+    "mechanism_tag": "sentiment_attention",
+    "mechanism_tags": [
+      "sentiment_attention",
+      "model_feature_divergence"
+    ],
+    "hypothesis": "Run the smallest possible follow-up requested as 2 then 1: first try to rescue the only mildly positive sentiment seed with a sign-flip and a simple buzz-improvement gate, then if that fails run one redesigned model-feature divergence probe that is not just another relative-value composite.",
+    "summary": "Completed the requested small 2 then 1 follow-up. The sentiment rescue failed: sa5_flip/omn8Mpnk reversed the already weak positive signal into sharpe -0.45 and fitness -0.09, while sa5_gate/vR5w3dYA only reached sharpe 0.25 and fitness 0.04 with failed sub-universe quality. The single redesigned model-feature divergence probe also failed: 1YokQ0nR, built from mdl177_fa_aspanratio versus mdl177_2_globaldevnorthamerica_v502_varresirtn, posted sharpe -0.14, fitness -0.04, returns -0.0111, turnover 0.0675, and failed sub-universe quality. This is enough evidence to stop both the sentiment rescue path and this first non-relative-value model-divergence redesign without spending more budget on nearby tweaks.",
+    "expressions": [
+      "reverse(rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20))))))",
+      "trade_when(greater(ts_backfill(scl12_buzz,20), ts_delay(ts_backfill(scl12_buzz,20),20)), rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20))))), -1)",
+      "rank(add(zscore(ts_backfill(mdl177_fa_aspanratio,63)), reverse(zscore(ts_backfill(mdl177_2_globaldevnorthamerica_v502_varresirtn,126)))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "omn8Mpnk",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "reverse(rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20))))))",
+        "metrics": {
+          "sharpe": -0.45,
+          "fitness": -0.09,
+          "returns": -0.0148,
+          "turnover": 0.343,
+          "drawdown": 0.1183,
+          "margin": -8.6e-05,
+          "subUniverseSharpe": 0.34
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.45
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.09
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "vR5w3dYA",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "trade_when(greater(ts_backfill(scl12_buzz,20), ts_delay(ts_backfill(scl12_buzz,20),20)), rank(add(zscore(ts_backfill(scl12_sentiment,20)), reverse(zscore(ts_std_dev(ts_backfill(scl12_buzz,63),20))))), -1)",
+        "metrics": {
+          "sharpe": 0.25,
+          "fitness": 0.04,
+          "returns": 0.0066,
+          "turnover": 0.2812,
+          "drawdown": 0.0487,
+          "margin": 4.7e-05,
+          "subUniverseSharpe": -0.4
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.25
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.04
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.11,
+            "value": -0.4
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "1YokQ0nR",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(ts_backfill(mdl177_fa_aspanratio,63)), reverse(zscore(ts_backfill(mdl177_2_globaldevnorthamerica_v502_varresirtn,126)))))",
+        "metrics": {
+          "sharpe": -0.14,
+          "fitness": -0.04,
+          "returns": -0.0111,
+          "turnover": 0.0675,
+          "drawdown": 0.2873,
+          "margin": -0.000328,
+          "subUniverseSharpe": -0.22
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.14
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.04
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.06,
+            "value": -0.22
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Do not spend more budget on sign flips or simple single-field gates around sa5.",
+      "If model_feature_divergence is revisited, use a genuinely different pairing or explicit disagreement construct rather than another smooth two-factor blend.",
+      "Next pivot should come from a new orthogonal mechanism or a materially different redesign, not nearby local repairs to these failed follow-ups."
+    ]
+  },
+  {
+    "timestamp": "2026-05-11T11:16:08+00:00",
+    "theme": "empire-building-acquisition-pressure-pivot",
+    "mechanism_tag": "capital_allocation_empire_building",
+    "mechanism_tags": [
+      "capital_allocation_empire_building",
+      "investment_efficiency"
+    ],
+    "hypothesis": "Firms that expand goodwill or intangible assets aggressively while also leaning on external financing or heavy reinvestment may be overbuilding and subsequently underperform.",
+    "summary": "Tested six orthogonal balance-sheet empire-building seeds after AST-screening them against QP2NPG6X and O0bgpLP7. The branch was cleanly novel but economically weak in USA TOP3000 delay 1 decay 5 SUBINDUSTRY. The best result was eb4 / P0nQlbmW, which shorted firms with rising goodwill-plus-intangibles relative to assets and high capex intensity; it reached sharpe 0.48, fitness 0.16, returns 0.0136, turnover 0.0205, and sub-universe sharpe 0.16. eb2 was mildly positive at sharpe 0.20 and fitness 0.07, while the rest were flat or negative. The family looks more like a low-turnover accounting-quality descriptor than a strong tradable edge in this regime.",
+    "expressions": [
+      "rank(add(reverse(zscore(ts_backfill(capex_to_total_assets,252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))",
+      "rank(add(reverse(zscore(ts_delta(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+      "rank(add(reverse(zscore(ts_delta(divide(ts_backfill(ppent,252), add(abs(ts_backfill(assets,252)),1)),252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252)), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+      "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(capex_to_total_assets,252)))))",
+      "rank(add(reverse(zscore(ts_backfill(mdl177_2_globaldevnorthamerica_v502_aqi,252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(capex_to_depreciation_linkage,252)))))",
+      "rank(add(zscore(divide(ts_backfill(fn_repurchased_shares_value_a,252), add(abs(ts_backfill(assets,252)),1))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "P0nQlbmW",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(capex_to_total_assets,252)))))",
+        "metrics": {
+          "sharpe": 0.48,
+          "fitness": 0.16,
+          "returns": 0.0136,
+          "turnover": 0.0205,
+          "drawdown": 0.0518,
+          "margin": 0.001332,
+          "subUniverseSharpe": 0.16
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.48
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.16
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.21,
+            "value": 0.16
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "0mAOQKl8",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_delta(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+        "metrics": {
+          "sharpe": 0.2,
+          "fitness": 0.07,
+          "returns": 0.0141,
+          "turnover": 0.0233,
+          "drawdown": 0.2018,
+          "margin": 0.001209,
+          "subUniverseSharpe": 0.17
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.2
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.07
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "RRNjk0Mg",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_backfill(mdl177_2_globaldevnorthamerica_v502_aqi,252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(capex_to_depreciation_linkage,252)))))",
+        "metrics": {
+          "sharpe": 0.1,
+          "fitness": 0.02,
+          "returns": 0.0067,
+          "turnover": 0.0212,
+          "drawdown": 0.1303,
+          "margin": 0.000629,
+          "subUniverseSharpe": 0.17
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.1
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.02
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "WjN1d0eP",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_backfill(capex_to_total_assets,252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))",
+        "metrics": {
+          "sharpe": 0.07,
+          "fitness": 0.01,
+          "returns": 0.0039,
+          "turnover": 0.0214,
+          "drawdown": 0.1357,
+          "margin": 0.000361,
+          "subUniverseSharpe": 0.22
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.07
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.01
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "9q9Z6Wko",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_delta(divide(ts_backfill(ppent,252), add(abs(ts_backfill(assets,252)),1)),252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252)), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+        "metrics": {
+          "sharpe": -0.18,
+          "fitness": -0.04,
+          "returns": -0.0072,
+          "turnover": 0.028,
+          "drawdown": 0.1087,
+          "margin": -0.000514,
+          "subUniverseSharpe": -0.37
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.18
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.04
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.08,
+            "value": -0.37
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "vR5wJv5G",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(zscore(divide(ts_backfill(fn_repurchased_shares_value_a,252), add(abs(ts_backfill(assets,252)),1))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))",
+        "metrics": {
+          "sharpe": -0.26,
+          "fitness": -0.07,
+          "returns": -0.008,
+          "turnover": 0.0251,
+          "drawdown": 0.1132,
+          "margin": -0.000634,
+          "subUniverseSharpe": 0.15
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.26
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.07
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "If this basin is revisited, use a different regime or explicit event conditioning rather than more small linear overlays in the same USA TOP3000 delay 1 setting.",
+      "Treat goodwill-plus-intangibles growth as the only mildly live sub-slice; the broader empire-building bundle was too weak."
+    ]
+  },
+  {
+    "timestamp": "2026-05-11T11:16:23+00:00",
+    "theme": "empire-building-overlay-followup",
+    "mechanism_tag": "capital_allocation_empire_building",
+    "mechanism_tags": [
+      "capital_allocation_empire_building",
+      "investment_efficiency"
+    ],
+    "hypothesis": "If the only live slice in the empire-building family is acquisition pressure, financing and turnover overlays should strengthen that slice faster than the broader family.",
+    "summary": "Ran two local repairs on the best acquisition-pressure seed after confirming both remained AST-distant from QP2NPG6X and O0bgpLP7. Neither helped. eb7_financing_overlay / le7pRnj8 combined goodwill-plus-intangibles growth with share dilution and debt issuance, but only reached sharpe 0.18 and fitness 0.06. eb8_turnover_overlay / blNGopQl paired the same acquisition-pressure core with share dilution and asset-turnover improvement and weakened further to sharpe 0.13 and fitness 0.03. This is enough evidence to park the family for now.",
+    "expressions": [
+      "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+      "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "le7pRnj8",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), reverse(zscore(ts_backfill(mdl177_valanalystmodel_qva_yoychgdebt,252)))))",
+        "metrics": {
+          "sharpe": 0.18,
+          "fitness": 0.06,
+          "returns": 0.0123,
+          "turnover": 0.0234,
+          "drawdown": 0.2049,
+          "margin": 0.001056,
+          "subUniverseSharpe": 0.16
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.18
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.06
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "blNGopQl",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(add(reverse(zscore(ts_delta(add(divide(ts_backfill(goodwill,252), add(abs(ts_backfill(assets,252)),1)), divide(ts_backfill(fnd6_intan,252), add(abs(ts_backfill(assets,252)),1))),252))), reverse(zscore(ts_backfill(mdl177_2_valueanalystmodel_qva_yoychgshares,252))), zscore(ts_backfill(mdl77_2valueanalystmodel_qva_chgato,252))))",
+        "metrics": {
+          "sharpe": 0.13,
+          "fitness": 0.03,
+          "returns": 0.0082,
+          "turnover": 0.0242,
+          "drawdown": 0.151,
+          "margin": 0.000681,
+          "subUniverseSharpe": 0.13
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.13
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.03
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Do not spend more local search budget on this family in the same regime unless the mechanism is recast around event timing or a different universe."
+    ]
+  },
+  {
+    "timestamp": "2026-05-14T08:22:37+00:00",
+    "theme": "family-a3-subindustry-liquidity-premium-first-shot",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Within-subindustry share-turnover ranking may capture a liquidity premium: long structurally illiquid stocks and short highly liquid peers using reverse(group_rank(divide(volume, sharesout), subindustry)).",
+    "summary": "Ran the authorized first shot exactly as approved in USA TOP3000 delay 1 decay 10 SUBINDUSTRY truncation 0.08. Result LLnqokg1 failed at the IS gate: Sharpe -0.53, Fitness -0.35, Turnover 0.1155, Margin -0.000955, Sub-universe Sharpe -0.29. Universe coverage for volume, sharesout, and subindustry remained 1.0. Concentrated Weight passed, but the platform did not expose a numeric max-weight value through the available tool surface. Blocking checks were LOW_SHARPE, LOW_FITNESS, and LOW_SUB_UNIVERSE_SHARPE; SELF_CORRELATION remained pending but is irrelevant because the alpha already failed the IS gate. Analytical sign-flip applies without re-simulation: removing the outer reverse implies Sharpe about +0.53, Fitness about +0.35, Turnover unchanged, Margin about +0.000955, and sub-universe quality likely sign-flipped as well, which still leaves the family below the IS bars. Classical within-subindustry illiquidity premium fails directionally on TOP3000 USA delay 1: high-turnover names beat low-turnover names, and the family is sub-IS in either orientation. Turnover at 11.55% also exceeded the pre-run 3% to 10% band, so the prior understated how much rank reshuffling can drive trading inside subindustry buckets. LOW_SUB_UNIVERSE_SHARPE should be treated as a dynamic Brain threshold rather than a fixed 0.06 platform check, because this repo's recorded limits vary materially across alphas. Treat A3 as failed calibration, not a lead.",
+    "expressions": [
+      "reverse(group_rank(divide(volume, sharesout), subindustry))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "LLnqokg1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "reverse(group_rank(divide(volume, sharesout), subindustry))",
+        "metrics": {
+          "sharpe": -0.53,
+          "fitness": -0.35,
+          "returns": -0.0552,
+          "turnover": 0.1155,
+          "drawdown": 0.459,
+          "margin": -0.000955,
+          "subUniverseSharpe": -0.29
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.53
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.35
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": -0.23,
+            "value": -0.29
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Close A3 as an IS-gate failure and do not spend the pre-approved group_zscore tuning pass here because the problem is sign and quality, not concentrated weight near the gate.",
+      "If Family A continues, move to A4 only after explicit authorization.",
+      "Use LLnqokg1 as an orthogonality reference for future liquidity-style screens.",
+      "Carry forward the directional constraint: on this platform slice, classical low-turnover premium is the wrong sign inside subindustry.",
+      "Carry forward the calibration note: static ordinal liquidity characteristics can still turn over above 0.10 because subindustry ranks reshuffle more than the level intuition suggests.",
+      "Carry forward the platform note: LOW_SUB_UNIVERSE_SHARPE limits are dynamic in Brain, so use the reported per-alpha threshold rather than assuming a constant platform gate."
+    ]
+  },
+  {
+    "timestamp": "2026-05-14T08:46:37+00:00",
+    "theme": "family-a4-price-impact-change-first-shot",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "Within-subindustry change in Amihud-style price impact may capture a liquidity-transition effect: stocks with rising recent price impact could reflect fresh imbalance or informed flow rather than the static low-liquidity premium tested in A3.",
+    "summary": "Ran the authorized Path B A4 first shot in USA TOP3000 delay 1 decay 5 SUBINDUSTRY truncation 0.08 with group_rank(ts_delta(divide(abs(returns), multiply(vwap, volume)), 20), subindustry). Result MPbXPqvn was weak positive but clear IS-fail: Sharpe 0.36, Fitness 0.06, Turnover 0.6944, Margin 0.000053, Sub-universe Sharpe 0.19. Universe coverage for returns, vwap, volume, and subindustry is effectively 1.0. Concentrated Weight passed, while the platform again did not expose a numeric max-weight value through the available tool surface. The alpha passed the dynamic LOW_SUB_UNIVERSE_SHARPE check at limit 0.16 but failed LOW_SHARPE and LOW_FITNESS. This falls in the pre-committed flat or weak branch, so the liquidity-transition test did not show enough evidence to keep deepening Family A in this universe. Driver attribution between numerator and denominator components is not identifiable from this result.",
+    "expressions": [
+      "group_rank(ts_delta(divide(abs(returns), multiply(vwap, volume)), 20), subindustry)"
+    ],
+    "alphas": [
+      {
+        "alphaId": "MPbXPqvn",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "group_rank(ts_delta(divide(abs(returns), multiply(vwap, volume)), 20), subindustry)",
+        "metrics": {
+          "sharpe": 0.36,
+          "fitness": 0.06,
+          "returns": 0.0184,
+          "turnover": 0.6944,
+          "drawdown": 0.1272,
+          "margin": 5.3e-05,
+          "subUniverseSharpe": 0.19
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.36
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.06
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Classify A4 as IS-fail and do not tune; Sharpe 0.36 is below the tuning window.",
+      "A5 should not reuse the static-liquidity scaffold and should not remain inside Family A by default; the pre-committed branch here is a family pivot unless a separate reviewer explicitly wants one last interaction-style liquidity hypothesis.",
+      "If liquidity is revisited later, split the composite into numerator-shock versus denominator-collapse diagnostics before proposing another combined price-impact transition alpha."
+    ]
+  },
+  {
+    "timestamp": "2026-05-14T10:51:56+00:00",
+    "theme": "family-a5-competitive-overlap-count-first-shot",
+    "mechanism_tag": "competitive_overlap_pressure",
+    "mechanism_tags": [
+      "competitive_overlap_pressure"
+    ],
+    "hypothesis": "Medium-horizon increase in the product-overlap competitor count may capture competitive encroachment: firms whose overlap network becomes more crowded should underperform before margin pressure is fully visible in accounting data.",
+    "summary": "Ran the authorized A5 first shot in USA TOP3000 delay 1 decay 8 SUBINDUSTRY truncation 0.08 with rank(reverse(ts_delta(ts_backfill(rel_num_all,252),126))). Result qMndjV8E was an IS-fail with full-universe versus sub-universe decoupling: Sharpe -0.08, Fitness -0.01, Returns -0.0021, Turnover 0.0399, Margin -0.000103, Sub-universe Sharpe 0.38, Concentrated Weight PASS. The alpha failed LOW_SHARPE and LOW_FITNESS, passed LOW_SUB_UNIVERSE_SHARPE at dynamic limit -0.03, and had SELF_CORRELATION pending but irrelevant because the alpha already failed IS. Against the pre-run band, turnover and sub-universe quality were inside range and concentration passed, but Sharpe, Fitness, Returns, and Margin all missed low. Follow-up investigation did not resolve rel_num_all cadence through Brain metadata, accessible API endpoints, or documentation, so the family was closed as indeterminate rather than wrong-sign or validation-ready. Banked family findings: medium-horizon rel_num_all change remains causally unverified under unresolved cadence; pv13 relationship fields are cadence-opaque on the available Brain surface; and material sub-universe/full-universe decoupling is diagnostic, not a license to compress the result into a simple wrong-sign verdict. Construction note for the record: plain rank was used rather than group_rank because product-overlap networks can span subindustries, so a within-subindustry rank would suppress the intended cross-industry encroachment signal while SUBINDUSTRY neutralization handled residual classification exposure after construction.",
+    "expressions": [
+      "rank(reverse(ts_delta(ts_backfill(rel_num_all,252),126)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "qMndjV8E",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_delta(ts_backfill(rel_num_all,252),126)))",
+        "metrics": {
+          "sharpe": -0.08,
+          "fitness": -0.01,
+          "returns": -0.0021,
+          "turnover": 0.0399,
+          "drawdown": 0.0642,
+          "margin": -0.000103,
+          "subUniverseSharpe": 0.38
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": -0.08
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": -0.01
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Close the family direction as indeterminate and do not spend a validation run on arbitrary backfill choices under unknown cadence.",
+      "Treat pv13 relationship fields as cadence-opaque until cadence is verified out of band; avoid parameter-sensitive constructions in this category meanwhile.",
+      "Preserve the sub-universe/full-universe decoupling as a diagnostic pattern, not a compressed wrong-sign verdict.",
+      "Do not switch to rel_ret_all as a follow-up under this closure; that would be a new mechanism, not a continuation."
+    ]
+  },
+  {
+    "timestamp": "2026-06-15T14:55:28+00:00",
+    "theme": "microstructure-double-gate-breakthrough",
+    "mechanism_tag": "microstructure_institutional_flow",
+    "mechanism_tags": [
+      "microstructure_institutional_flow"
+    ],
+    "hypothesis": "The single vol-surplus gate (zq5aX5PK at Fitness 0.80) was filtering low-vol noise but missing low-volume false positives. A double gate requiring BOTH elevated volatility AND elevated volume should produce a cleaner institutional-flow signal by only firing when both conditions signal active institutional participation.",
+    "summary": "Forensic review of the quant journey revealed that zq5aX5PK (Sharpe 1.30, Fitness 0.80) was abandoned prematurely after only 2 follow-up tests. Resumed the D3r line with a full parameter sweep (decay 10/15/20, gate 10/42 and 21/126, correlation windows 45/50/60/65) \u2014 all confirmed zq5aX5PK is a local optimum for the single-gate architecture. Then tested three structural variants: (1) double gate (vol-surplus \u00d7 volume-surplus), (2) volume/adv20 normalized delta, (3) group_rank instead of group_zscore on returns leg. The double gate was the breakthrough: d5QNpnwv = rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), multiply(max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0), max(subtract(volume, ts_mean(volume, 63)), 0))), ts_delta(volume,1), 55))) reached Sharpe 1.50, Fitness 1.03, Sub-U Sharpe 1.43, Turnover 0.0867 with NO blocking IS checks. Grade AVERAGE. Only SELF_CORRELATION PENDING. The double gate adds +0.23 Fitness and +0.20 Sharpe vs the single gate. Key mechanistic insight: the vol gate filters low-vol noise, but the volume gate additionally filters low-activity periods where volume changes are statistical noise rather than institutional flow. Together they isolate the regime where return-volume correlation genuinely reflects institutional activity.",
+    "expressions": [
+      "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), multiply(max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0), max(subtract(volume, ts_mean(volume, 63)), 0))), ts_delta(volume,1), 55)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "d5QNpnwv",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "AVERAGE",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), multiply(max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0), max(subtract(volume, ts_mean(volume, 63)), 0))), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.5,
+          "fitness": 1.03,
+          "returns": 0.0585,
+          "turnover": 0.0867,
+          "drawdown": 0.0893,
+          "margin": 0.00135,
+          "subUniverseSharpe": 1.43
+        },
+        "blockingChecks": [],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "zq5aX5PK",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.3,
+          "fitness": 0.8,
+          "returns": 0.0479,
+          "turnover": 0.0974,
+          "drawdown": 0.095,
+          "margin": 0.000983,
+          "subUniverseSharpe": 1.2
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.8
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "Vk8AvaLw",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.15,
+          "fitness": 0.67,
+          "returns": 0.0424,
+          "turnover": 0.08,
+          "drawdown": 0.0967,
+          "margin": 0.00106,
+          "subUniverseSharpe": 1.13
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.15
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.67
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "78dekjEx",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.11,
+          "fitness": 0.64,
+          "returns": 0.041,
+          "turnover": 0.0717,
+          "drawdown": 0.0952,
+          "margin": 0.001144,
+          "subUniverseSharpe": 1.12
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.11
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.64
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "QPQw1oor",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.1,
+          "fitness": 0.63,
+          "returns": 0.041,
+          "turnover": 0.0667,
+          "drawdown": 0.0937,
+          "margin": 0.001231,
+          "subUniverseSharpe": 1.12
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.1
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.63
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "bl9eYe1r",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),126)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.13,
+          "fitness": 0.66,
+          "returns": 0.0422,
+          "turnover": 0.0992,
+          "drawdown": 0.1009,
+          "margin": 0.00085,
+          "subUniverseSharpe": 1.08
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.13
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.66
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "9qRNzdPe",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,10), ts_mean(ts_std_dev(returns,10),42)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 0.99,
+          "fitness": 0.52,
+          "returns": 0.035,
+          "turnover": 0.0802,
+          "drawdown": 0.0985,
+          "margin": 0.000872,
+          "subUniverseSharpe": 1.11
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.99
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.52
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "KPLWlq5N",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 50)))",
+        "metrics": {
+          "sharpe": 1.17,
+          "fitness": 0.69,
+          "returns": 0.0439,
+          "turnover": 0.106,
+          "drawdown": 0.0953,
+          "margin": 0.000828,
+          "subUniverseSharpe": 1.19
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.17
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.69
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "WjgvjZMo",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 45)))",
+        "metrics": {
+          "sharpe": 1.1,
+          "fitness": 0.63,
+          "returns": 0.0415,
+          "turnover": 0.1156,
+          "drawdown": 0.093,
+          "margin": 0.000718,
+          "subUniverseSharpe": 1.18
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.1
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.63
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "xAnJO1rq",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 60)))",
+        "metrics": {
+          "sharpe": 1.1,
+          "fitness": 0.62,
+          "returns": 0.04,
+          "turnover": 0.0897,
+          "drawdown": 0.0944,
+          "margin": 0.000891,
+          "subUniverseSharpe": 1.27
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.1
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.62
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "YPARL3Xo",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 65)))",
+        "metrics": {
+          "sharpe": 1.03,
+          "fitness": 0.56,
+          "returns": 0.0374,
+          "turnover": 0.0826,
+          "drawdown": 0.0923,
+          "margin": 0.000905,
+          "subUniverseSharpe": 1.14
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.03
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.56
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "rKWZYGzj",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(divide(volume, adv20), 1), 55)))",
+        "metrics": {
+          "sharpe": 1.25,
+          "fitness": 0.75,
+          "returns": 0.0446,
+          "turnover": 0.0965,
+          "drawdown": 0.0955,
+          "margin": 0.000925,
+          "subUniverseSharpe": 1.2
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.75
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "omYx7jlJ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_corr(multiply(group_rank(returns, subindustry), max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0)), ts_delta(volume,1), 55)))",
+        "metrics": {
+          "sharpe": 1.12,
+          "fitness": 0.65,
+          "returns": 0.0423,
+          "turnover": 0.1194,
+          "drawdown": 0.104,
+          "margin": 0.000709,
+          "subUniverseSharpe": 1.04
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.12
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.65
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "Re-check SELF_CORRELATION on d5QNpnwv in 1-2 days; if it clears, submit immediately (all IS gates PASS, Sharpe 1.50, Fitness 1.03, Grade AVERAGE).",
+      "If SELF_CORRELATION fails on d5QNpnwv, the microstructure return-volume-correlation family is likely crowded \u2014 do not continue tuning this basin; pivot to a new orthogonal mechanism.",
+      "If d5QNpnwv is submitted and moves to OS, run a very small robustness check: test double gate at correlation windows 50 and 60 (since the gate interaction might shift the optimal window slightly even though single-gate sweep showed 55 is optimal).",
+      "If d5QNpnwv ships successfully, this will be the second submitted alpha (after QP2NPG6X) from a completely different mechanism family \u2014 a strong diversification win."
+    ]
+  },
+  {
+    "timestamp": "2026-06-15T17:28:47+00:00",
+    "theme": "momentum-reversal-35d-breakthrough",
+    "mechanism_tag": "momentum_reversal",
+    "mechanism_tags": [
+      "momentum_reversal"
+    ],
+    "hypothesis": "Short-term momentum reversal is one of the most robust factors in finance. In the current retail-driven, high-concentration tech market, stocks with extreme recent returns tend to mean-revert as retail chasing exhausts itself. The optimal reversal window should be long enough to filter daily noise but short enough to capture retail-driven overextension.",
+    "summary": "After the call/put IV skew family failed (ATM parity kills signal) and the analyst EPS revision family failed (fundamental data too slow), pivoted to pure price momentum reversal. Tested windows from 5d to 40d with various normalizations. The 40-day raw reversal (wpe0Jjj1) reached Fitness 1.06 but Sharpe 1.22 (0.03 below bar). Nearby window sweep found the 35-day sweet spot: XgKd2a5m = rank(reverse(ts_zscore(ts_sum(returns, 35), 252))) at Sharpe 1.29, Fitness 1.14, Sub-U 0.77, Turnover 0.127. Zero blocking checks. Submitted and moved to OS/ACTIVE immediately. SELF_CORRELATION passed at 0.48 (limit 0.70). This is the third shipped alpha from a third completely different mechanism family (behavioral mean-reversion), joining QP2NPG6X (options trend-following) and d5QNpnwv (microstructure mean-reversion). The expression uses only 4 operators on a single field (returns) \u2014 the simplest successful alpha yet. Session total: 2 new shipped alphas (d5QNpnwv + XgKd2a5m), 6 families tested, 35+ seeds simulated.",
+    "expressions": [
+      "rank(reverse(ts_zscore(ts_sum(returns, 35), 252)))"
+    ],
+    "alphas": [
+      {
+        "alphaId": "XgKd2a5m",
+        "status": "ACTIVE",
+        "stage": "OS",
+        "grade": "AVERAGE",
+        "expression": "rank(reverse(ts_zscore(ts_sum(returns, 35), 252)))",
+        "metrics": {
+          "sharpe": 1.29,
+          "fitness": 1.14,
+          "returns": 0.0989,
+          "turnover": 0.1266,
+          "drawdown": 0.0826,
+          "margin": 0.001562,
+          "subUniverseSharpe": 0.77
+        },
+        "blockingChecks": [],
+        "pendingChecks": [],
+        "submittable": true
+      },
+      {
+        "alphaId": "wpe0Jjj1",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "AVERAGE",
+        "expression": "rank(reverse(ts_zscore(ts_sum(returns, 40), 252)))",
+        "metrics": {
+          "sharpe": 1.22,
+          "fitness": 1.06,
+          "returns": 0.0935,
+          "turnover": 0.1195,
+          "drawdown": 0.0834,
+          "margin": 0.001566,
+          "subUniverseSharpe": 0.65
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.22
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLR0gJ96",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(group_zscore(ts_zscore(ts_sum(returns, 40), 252), subindustry)))",
+        "metrics": {
+          "sharpe": 1.22,
+          "fitness": 1.0,
+          "returns": 0.0833,
+          "turnover": 0.116,
+          "drawdown": 0.0727,
+          "margin": 0.001437,
+          "subUniverseSharpe": 0.64
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.22
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "pw79VYkX",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(ts_sum(returns, 40), 252)))",
+        "metrics": {
+          "sharpe": 1.14,
+          "fitness": 0.94,
+          "returns": 0.0857,
+          "turnover": 0.0987,
+          "drawdown": 0.0811,
+          "margin": 0.001738,
+          "subUniverseSharpe": 0.58
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.14
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.94
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLR0ga26",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(ts_sum(returns, 40), 252)))",
+        "metrics": {
+          "sharpe": 1.11,
+          "fitness": 0.91,
+          "returns": 0.0834,
+          "turnover": 0.0902,
+          "drawdown": 0.0789,
+          "margin": 0.001848,
+          "subUniverseSharpe": 0.57
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.11
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.91
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "3qA83odX",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(group_zscore(ts_zscore(ts_sum(returns, 20), 252), subindustry)))",
+        "metrics": {
+          "sharpe": 1.13,
+          "fitness": 0.79,
+          "returns": 0.0792,
+          "turnover": 0.1607,
+          "drawdown": 0.0801,
+          "margin": 0.000986,
+          "subUniverseSharpe": 0.65
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.13
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.79
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "9qRNPlR9",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(ts_sum(returns, 20), 252)))",
+        "metrics": {
+          "sharpe": 1.06,
+          "fitness": 0.75,
+          "returns": 0.0829,
+          "turnover": 0.1663,
+          "drawdown": 0.0955,
+          "margin": 0.000997,
+          "subUniverseSharpe": 0.54
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.06
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.75
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "omYxQWeb",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_sum(returns, 5)))",
+        "metrics": {
+          "sharpe": 1.2,
+          "fitness": 0.72,
+          "returns": 0.135,
+          "turnover": 0.3744,
+          "drawdown": 0.1112,
+          "margin": 0.000721,
+          "subUniverseSharpe": 0.88
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 1.2
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.72
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "omYxvWbk",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(multiply(ts_sum(returns, 20), max(subtract(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), 0)), 126)))",
+        "metrics": {
+          "sharpe": 0.39,
+          "fitness": 0.16,
+          "returns": 0.0242,
+          "turnover": 0.1375,
+          "drawdown": 0.1398,
+          "margin": 0.000352,
+          "subUniverseSharpe": 0.18
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.39
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.16
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "gJ3nw7Qv",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(multiply(ts_sum(returns, 20), max(subtract(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), 0)), 252)))",
+        "metrics": {
+          "sharpe": 0.31,
+          "fitness": 0.12,
+          "returns": 0.0197,
+          "turnover": 0.1251,
+          "drawdown": 0.1008,
+          "margin": 0.000315,
+          "subUniverseSharpe": 0.07
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.31
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.12
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.13,
+            "value": 0.07
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "P01ke1NE",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(ts_delta(ts_backfill(divide(implied_volatility_call_10, implied_volatility_put_10), 63), 21), 63)))",
+        "metrics": {
+          "sharpe": 0.31,
+          "fitness": 0.04,
+          "returns": 0.0069,
+          "turnover": 0.5289,
+          "drawdown": 0.0281,
+          "margin": 2.6e-05,
+          "subUniverseSharpe": 0.63
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.31
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.04
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "ZYoOZJQQ",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(multiply(ts_delta(divide(implied_volatility_call_10, implied_volatility_put_10), 21), max(subtract(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), 0)), 63)))",
+        "metrics": {
+          "sharpe": 0.75,
+          "fitness": 0.16,
+          "returns": 0.0188,
+          "turnover": 0.4036,
+          "drawdown": 0.0361,
+          "margin": 9.3e-05,
+          "subUniverseSharpe": 0.66
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.75
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.16
+          },
+          {
+            "name": "CONCENTRATED_WEIGHT",
+            "result": "FAIL",
+            "date": "2022-02-24",
+            "limit": 0.1,
+            "value": 0.285192
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      },
+      {
+        "alphaId": "LLR060Aa",
+        "status": "UNSUBMITTED",
+        "stage": "IS",
+        "grade": "INFERIOR",
+        "expression": "rank(reverse(ts_zscore(ts_delta(ts_backfill(anl4_fs_detail_estimates_basic_qf_delay1_v4_nd_eps_mean, 252), 63), 252)))",
+        "metrics": {
+          "sharpe": 0.36,
+          "fitness": 0.1,
+          "returns": 0.0092,
+          "turnover": 0.0594,
+          "drawdown": 0.0816,
+          "margin": 0.00031,
+          "subUniverseSharpe": -0.25
+        },
+        "blockingChecks": [
+          {
+            "name": "LOW_SHARPE",
+            "result": "FAIL",
+            "limit": 1.25,
+            "value": 0.36
+          },
+          {
+            "name": "LOW_FITNESS",
+            "result": "FAIL",
+            "limit": 1.0,
+            "value": 0.1
+          },
+          {
+            "name": "LOW_SUB_UNIVERSE_SHARPE",
+            "result": "FAIL",
+            "limit": 0.16,
+            "value": -0.25
+          }
+        ],
+        "pendingChecks": [
+          {
+            "name": "SELF_CORRELATION",
+            "result": "PENDING"
+          }
+        ],
+        "submittable": false
+      }
+    ],
+    "followUps": [
+      "XgKd2a5m is now OS/ACTIVE \u2014 monitor performance.",
+      "The momentum reversal family is likely near its local optimum. Do not continue tuning without a specific new mechanism idea (e.g., regime-conditional reversal based on market drawdown).",
+      "Next priority: P2 (earnings surprise) or P4 (short-interest/crowded-short) from research plan \u2014 both are orthogonal to all 3 shipped alphas.",
+      "Update research-plan.md to reflect 3 shipped alphas."
+    ]
+  }
+]
