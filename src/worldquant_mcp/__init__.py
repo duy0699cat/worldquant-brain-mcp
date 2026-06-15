@@ -1,0 +1,1 @@
+"""WorldQuant MCP package."""

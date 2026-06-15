@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "worldquant-mcp"
+version = "0.1.0"
+description = "MCP server and reference tooling for WorldQuant Brain workflows"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.27.0",
+    "pypdfium2>=4.30.0",
+    "pypdf>=5.5.0",
+    "python-dotenv>=1.1.0",
+    "rapidocr-onnxruntime>=1.4.4",
+]
+
+[project.scripts]
+wq-ingest-reference = "worldquant_mcp.reference.extract:main"
+worldquant-mcp = "worldquant_mcp.server:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

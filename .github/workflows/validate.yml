@@ -1,0 +1,55 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
+
+      - name: Compile Python sources
+        run: python -m compileall src
+
+      - name: Import package smoke test
+        run: |
+          python - <<'PY'
+          import worldquant_mcp
+          from worldquant_mcp.config import WorldQuantConfig
+
+          print(worldquant_mcp.__file__)
+          print(WorldQuantConfig)
+          PY
+
+      - name: Optional WorldQuant auth smoke test
+        if: ${{ secrets.WQ_BRAIN_EMAIL != '' && secrets.WQ_BRAIN_PASSWORD != '' }}
+        env:
+          WQ_BRAIN_EMAIL: ${{ secrets.WQ_BRAIN_EMAIL }}
+          WQ_BRAIN_PASSWORD: ${{ secrets.WQ_BRAIN_PASSWORD }}
+        run: |
+          python - <<'PY'
+          from worldquant_mcp.client import WorldQuantClient
+          from worldquant_mcp.config import WorldQuantConfig
+
+          config = WorldQuantConfig.from_env()
+          client = WorldQuantClient(config)
+          account = client.get_account_info()
+          if not isinstance(account, dict) or not account:
+              raise SystemExit('WorldQuant account lookup returned no data')
+          print('WorldQuant auth smoke test passed')
+          PY
