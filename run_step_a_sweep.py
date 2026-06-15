@@ -1,5 +1,5 @@
 """
-Step A sweep — O0bgpLP7 wrapper discipline probes.
+Step A sweep — [REDACTED] wrapper discipline probes.
 Seeds A1, A3, A4, A6 (tweaked). Sequential, bounded at 180s each.
 """
 from __future__ import annotations
@@ -10,10 +10,10 @@ from worldquant_mcp.client import WorldQuantClient
 from worldquant_mcp.models import SimulationSettings
 
 SEEDS = {
-    "A1": "ts_rank(ts_decay_linear(reverse(ts_corr(returns, ts_delta(volume,1), 55)), 7), 126)",
-    "A3": "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)))",
-    "A4": "ts_rank(ts_decay_linear(reverse(ts_corr(ts_zscore(returns, 55), ts_zscore(ts_delta(volume,1), 55), 55)), 7), 126)",
-    "A6": "trade_when(greater(ts_std_dev(returns, 21), ts_mean(ts_std_dev(returns, 21), 63)), rank(reverse(ts_corr(returns, ts_delta(volume,1), 55))), -1)",
+    "A1": "[REDACTED]",
+    "A3": "[REDACTED]",
+    "A4": "[REDACTED]",
+    "A6": "[REDACTED]",
 }
 
 SETTINGS = SimulationSettings(

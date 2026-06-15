@@ -248,33 +248,7 @@ _INFIX_PRECEDENCE = {
 }
 _UNARY_PRECEDENCE = 8
 
-FIELD_ALIASES = {
-    "implied_volatility_put_10": "10-day at-the-money put implied volatility",
-    "implied_volatility_put_120": "120-day at-the-money put implied volatility",
-    "implied_volatility_mean_skew_30": "30-day mean implied-volatility skew",
-    "snt1_d1_dynamicfocusrank": "dynamic focus-rank sentiment signal",
-    "snt1_cored1_score": "core daily sentiment score",
-    "anl4_qf_az_eps_mean": "analyst EPS mean estimate",
-    "anl4_qf_az_dts_spe": "analyst EPS estimate dispersion",
-    "anl4_mark": "broker recommendation marker",
-    "receivable": "receivables",
-    "inventory": "inventory",
-    "sales": "sales",
-    "cogs": "cost of goods sold",
-    "cashflow_op": "operating cash flow",
-    "income": "income",
-    "employee": "employee count",
-    "return_on_invested_capital_4": "return on invested capital",
-    "mdl177_v1_400_ttmaccu": "mdl177 trailing accruals factor",
-    "mdl177_earningsqualityfactor_ttmaccu_alt": "mdl177 alternative trailing accrual-quality factor",
-    "mdl177_2_managementqualityfactor_ocfroi": "mdl177 operating cash-flow return on investment factor",
-    "mdl177_2_managementqualityfactor_fcfroi": "mdl177 free cash-flow return on investment factor",
-    "mdl177_2_managementqualityfactor_noato": "mdl177 net operating asset turnover factor",
-    "mdl177_2_managementqualityfactor_opmb": "mdl177 operating margin factor",
-    "mdl177_2_managementqualityfactor_ocfmargin": "mdl177 operating cash-flow margin factor",
-    "mdl177_2_5yearrelativevaluefactor_rel5ycfp": "mdl177 5-year relative cash-flow-to-price factor",
-    "mdl177_2_5yearrelativevaluefactor_rel5ydivp": "mdl177 5-year relative dividend-to-price factor",
-}
+FIELD_ALIASES = {}  # proprietary field dictionary removed for public release
 
 
 def _summarize_expression(node: ExpressionNode) -> str:

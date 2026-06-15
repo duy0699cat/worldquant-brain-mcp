@@ -8,7 +8,7 @@ async def main():
     if asyncio.iscoroutinefunction(c.authenticate): await c.authenticate()
     else: c.authenticate()
     print('Poll Timestamp:', datetime.datetime.now().isoformat())
-    for aid in ['QP2NPG6X', 'RRNX8Zz0', 'zq5aX5PK']:
+    for aid in ['[REDACTED]', '[REDACTED]', '[REDACTED]']:
         res = c._get_json('/alphas/' + aid)
         if asyncio.iscoroutine(res): res = await res
         checks = res.get('is', {}).get('checks', [])

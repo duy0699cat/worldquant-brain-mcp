@@ -11,11 +11,11 @@ print("Auth OK")
 settings = SimulationSettings()  # USA/TOP3000/delay=1/decay=5/SUBINDUSTRY/truncation=0.08
 
 SEEDS = [
-    ("B1-1", "group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)"),
-    ("B1-2", "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry))"),
-    ("B1-3", "group_rank(reverse(ts_corr(returns, ts_delta(volume,1), 55)), subindustry)"),
-    ("B1-4r", "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)))"),
-    ("B1-5", "rank(group_zscore(reverse(ts_corr(returns, ts_delta(volume,1), 55)), sector))"),
+    ("B1-1", "[REDACTED]"),
+    ("B1-2", "[REDACTED]"),
+    ("B1-3", "[REDACTED]"),
+    ("B1-4r", "[REDACTED]"),
+    ("B1-5", "[REDACTED]"),
 ]
 
 results = []

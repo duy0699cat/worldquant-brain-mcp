@@ -1,4 +1,4 @@
-"""C-sweep: B1 follow-up design-choice isolation from npnbjY0a anchor."""
+"""C-sweep: B1 follow-up design-choice isolation from [REDACTED] anchor."""
 from worldquant_mcp.config import WorldQuantConfig
 from worldquant_mcp.client import WorldQuantClient
 from worldquant_mcp.models import SimulationSettings
@@ -11,14 +11,14 @@ print("Auth OK")
 settings = SimulationSettings()  # USA/TOP3000/delay=1/decay=5/SUBINDUSTRY/truncation=0.08
 
 SEEDS = [
-    ("C1", "rank(reverse(ts_corr(ts_zscore(returns, 55), ts_delta(volume,1), 55)))"),
-    ("C2", "rank(reverse(ts_corr(returns, group_zscore(ts_delta(volume,1), subindustry), 55)))"),
-    ("C3", "rank(reverse(ts_corr(group_zscore(returns, subindustry), group_zscore(ts_delta(volume,1), subindustry), 55)))"),
-    ("C4", "rank(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 65)))"),
-    ("C5", "rank(ts_decay_linear(reverse(ts_corr(group_zscore(returns, subindustry), ts_delta(volume,1), 55)), 7))"),
+    ("C1", "[REDACTED]"),
+    ("C2", "[REDACTED]"),
+    ("C3", "[REDACTED]"),
+    ("C4", "[REDACTED]"),
+    ("C5", "[REDACTED]"),
 ]
 
-BASELINE = {"name": "npnbjY0a", "sharpe": 1.20, "fitness": 0.75}
+BASELINE = {"name": "[REDACTED]", "sharpe": 1.20, "fitness": 0.75}
 FITNESS_PASS = 1.0
 SHARPE_PASS = 1.25
 
@@ -76,7 +76,7 @@ for name, expr in SEEDS:
             print("\nEARLY STOP: blocking check '" + b_name + "' triggered on 2+ seeds.")
 
 print("\n\n=== LEADERBOARD (sorted by fitness) ===")
-print("Baseline npnbjY0a: Sharpe=" + str(BASELINE["sharpe"]) + "  Fitness=" + str(BASELINE["fitness"]))
+print("Baseline [REDACTED]: Sharpe=" + str(BASELINE["sharpe"]) + "  Fitness=" + str(BASELINE["fitness"]))
 print("-" * 70)
 ranked = sorted(results, key=lambda x: (x["fitness"] or -99), reverse=True)
 for row in ranked:

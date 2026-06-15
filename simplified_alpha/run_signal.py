@@ -1,13 +1,8 @@
 """
-Simplified retail version of the d5QNpnwv dual-gated institutional flow alpha.
+Simplified retail version of the [REDACTED] dual-gated institutional flow alpha.
 
 Original Brain expression:
-  rank(reverse(ts_corr(
-    multiply(group_zscore(returns, subindustry),
-             multiply(max(subtract(ts_std_dev(returns,21),
-                                    ts_mean(ts_std_dev(returns,21),63)), 0),
-                      max(subtract(volume, ts_mean(volume, 63)), 0))),
-    ts_delta(volume,1), 55)))
+  [REDACTED]
 
 Mechanism (in plain English):
   Short stocks whose peer-relative returns correlate with volume surges
@@ -269,7 +264,7 @@ def print_report(
 def main():
     print()
     print("  ╔" + "═" * 56 + "╗")
-    print("  ║  d5QNpnwv — Dual-Gated Institutional Flow Signal     ║")
+    print("  ║  [REDACTED] — Dual-Gated Institutional Flow Signal     ║")
     print("  ║  Simplified Retail Version                           ║")
     print("  ╚" + "═" * 56 + "╝")
 

@@ -6,9 +6,9 @@ Last updated: 2026-06-16
 
 | # | Alpha ID | Mechanism | Expression | Sharpe | Fitness | Stage |
 |---|----------|-----------|------------|--------|---------|-------|
-| 1 | QP2NPG6X | Options-IV momentum with ts_rank | `ts_rank(ts_decay_linear(ts_zscore(ts_delta(ts_backfill(implied_volatility_put_10,63),63),63),7), 126)` | 1.45 | 1.03 | OS/ACTIVE |
-| 2 | d5QNpnwv | Microstructure dual-gated return-volume correlation | `rank(reverse(ts_corr(multiply(group_zscore(returns, subindustry), multiply(max(subtract(ts_std_dev(returns,21), ts_mean(ts_std_dev(returns,21),63)), 0), max(subtract(volume, ts_mean(volume, 63)), 0))), ts_delta(volume,1), 55)))` | 1.50 | 1.03 | OS/ACTIVE |
-| 3 | XgKd2a5m | 35-day momentum reversal | `rank(reverse(ts_zscore(ts_sum(returns, 35), 252)))` | 1.29 | 1.14 | OS/ACTIVE |
+| 1 | [REDACTED] | Options-IV momentum with ts_rank | `[REDACTED]` | 1.45 | 1.03 | OS/ACTIVE |
+| 2 | [REDACTED] | Microstructure dual-gated return-volume correlation | `[REDACTED]` | 1.50 | 1.03 | OS/ACTIVE |
+| 3 | [REDACTED] | 35-day momentum reversal | `[REDACTED]` | 1.29 | 1.14 | OS/ACTIVE |
 
 ## Exhausted / Dead Families
 
@@ -23,15 +23,15 @@ Last updated: 2026-06-16
 
 ## Active Pipeline
 
-### ✅ P1 — Momentum Reversal — SHIPPED as XgKd2a5m (2026-06-16)
-- **Expression**: `rank(reverse(ts_zscore(ts_sum(returns, 35), 252)))`
+### ✅ P1 — Momentum Reversal — SHIPPED as [REDACTED] (2026-06-16)
+- **Expression**: `[REDACTED]`
 - **Sharpe 1.29, Fitness 1.14, OS/ACTIVE**
 - SELF_CORRELATION PASS at 0.48
 
 ### 🟡 P2 — Earnings Surprise + Revision Momentum
 - **Status**: Not started
-- **Why**: Earlier "analyst confidence" attempt (E5gVLQ2r) used weak proxies (anl4_mark, anl4_qf_az_eps_mean). A cleaner earnings-surprise construct using the actual surprise magnitude could work.
-- **Key fields**: `anl4_fs_detail_estimates_basic_qf_delay1_v4_nd_eps_mean`, actual reported EPS
+- **Why**: Earlier "analyst confidence" attempt ([REDACTED]) used weak proxies ([REDACTED], [REDACTED]). A cleaner earnings-surprise construct using the actual surprise magnitude could work.
+- **Key fields**: `[REDACTED]`, actual reported EPS
 - **Risk**: Fundamental data cadence unknown; earlier EPS revision attempts failed
 
 ### 🟡 P3 — Options Flow / Put-Call Imbalance
@@ -43,7 +43,7 @@ Last updated: 2026-06-16
 ### 🟡 P4 — Short-Interest / Crowded-Short Dynamics
 - **Status**: Not started
 - **Why**: Short-squeeze and short-crowding signals are mechanically different from both shipped alphas. Biweekly FINRA cadence is acceptable for medium-horizon signals.
-- **Key fields**: `twelve_month_short_interest_change`, `mdl177_liquidityriskfactor_si_ratio_alt`, `mdl77_shortsentimentfactor_tni_ths`
+- **Key fields**: `twelve_month_short_interest_change`, `[REDACTED]`, `[REDACTED]`
 - **Risk**: Cadence is biweekly (external knowledge); avoid daily-lag sweeps. API cadence unverifiable.
 
 ### 🟡 P5 — Cross-Asset / Macro Sensitivity Beta

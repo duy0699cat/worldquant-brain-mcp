@@ -96,7 +96,7 @@ MECHANISM_KEYWORDS = {
 }
 MECHANISM_TAG_KEYWORDS = {
     "options_iv_momentum": {"option", "options", "implied", "volatility", "skew", "term", "put", "call", "iv", "breakeven"},
-    "working_capital_stress": {"working", "capital", "receivable", "receivables", "inventory", "sales", "cogs", "cashflow_op", "income"},
+    "working_capital_stress": {"working", "capital", "receivable", "receivables", "inventory", "sales", "cogs", "[REDACTED]", "income"},
     "microstructure_institutional_flow": {"microstructure", "volume", "adv", "vwap", "turnover", "liquidity", "illiquidity", "spread", "range", "flow"},
     "sentiment_attention": {"sentiment", "attention", "news", "headline", "buzz", "coverage", "focus", "social", "snt1"},
     "model_feature_divergence": {"model", "mdl", "mdl177", "residual", "forecast", "prediction", "divergence", "relativevaluefactor"},
@@ -1076,7 +1076,7 @@ def _payload_blend_variants(seed_expression: str, conditional_fields: list[str])
 
 def _candidate_blend_fields(seed_expression: str, conditional_fields: list[str]) -> list[str]:
     candidates: list[str] = []
-    for field in [*conditional_fields, "inventory_turnover", "sales", "cashflow_op"]:
+    for field in [*conditional_fields, "inventory_turnover", "sales", "[REDACTED]"]:
         if field not in candidates and field in seed_expression or field in conditional_fields:
             candidates.append(field)
     return candidates[:2]
