@@ -98,6 +98,30 @@ Or run it via Python:
 - 429 handling is now more robust in the shared client: temporary rate limits are retried with bounded backoff, and `CONCURRENT_SIMULATION_LIMIT_EXCEEDED` backs off more aggressively before failing.
 - Tune `WQ_BRAIN_RATE_LIMIT_MAX_RETRIES` and `WQ_BRAIN_RATE_LIMIT_MAX_WAIT_SECONDS` if you want stricter or looser retry behavior.
 
+## Example session
+
+Once the server is running, an MCP-aware agent calls the tools directly. Illustrative output
+below (metric values are synthetic and field/alpha names are placeholders — no real platform
+data is shown):
+
+```text
+> healthcheck
+{ "status": "ok", "authenticated": true }
+
+> get_platform_operators
+[ "rank", "zscore", "ts_delta", "ts_backfill", "ts_decay_linear", "group_zscore", ... ]
+
+> create_simulation  expression="rank(<your_signal>)"  settings=USA/TOP3000/delay=1
+{ "status": "COMPLETE", "alpha_id": "<id>",
+  "is": { "sharpe": 1.21, "fitness": 0.74, "returns": 0.052, "turnover": 0.11 } }
+
+> validate_alpha_submission_by_id  alpha_id="<id>"
+{ "ready": false, "blocking": ["LOW_FITNESS"], "pending": ["SELF_CORRELATION"] }
+```
+
+The operator names above are part of BRAIN's public expression language; the pipeline never
+hard-codes proprietary data fields or alpha identifiers.
+
 ## Implemented tools
 
 - `healthcheck`
