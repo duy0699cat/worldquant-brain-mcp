@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "httpx>=0.28.1",
-    "mcp[cli]>=1.27.0",
+    "mcp[cli]>=1.27.0,<2",
     "pypdfium2>=4.30.0",
     "pypdf>=5.5.0",
     "python-dotenv>=1.1.0",

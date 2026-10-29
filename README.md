@@ -25,11 +25,14 @@ python -m venv .venv
 copy .env.example .env   # then fill in WQ_BRAIN_EMAIL and WQ_BRAIN_PASSWORD
 ```
 
-On macOS/Linux, use `.venv/bin/...` instead of `.venv/Scripts/...` and `cp` instead of `copy`.
+On macOS/Linux (or Git Bash), use `cp` instead of `copy`; on macOS/Linux also use `.venv/bin/...`
+instead of `.venv/Scripts/...`. The install pulls about 60 packages (the OCR step needs
+onnxruntime and OpenCV) and takes a minute or two.
 
 Then register the server with your MCP client (below) and call `healthcheck` from the agent.
 The local reference corpus is optional; without it, `healthcheck` reports `referenceChunks: 0`
-and the reference-search tools return nothing.
+and the reference-search tools return nothing. Tools that only touch local files
+(`mutate_alpha_expression`, reference search, `list_alpha_experiments`) also work without credentials.
 
 ## Status
 
@@ -92,10 +95,10 @@ GitHub Copilot. Don't start it yourself for normal use; the client starts it.
 
 ### Claude Code
 
-From the repo root, with credentials in `.env`:
+From the repo root, with credentials in `.env` (use the absolute path to the executable):
 
 ```powershell
-claude mcp add --transport stdio worldquant-mcp -- .venv/Scripts/worldquant-mcp.exe
+claude mcp add worldquant-mcp -- C:\path\to\worldquant-brain-mcp\.venv\Scripts\worldquant-mcp.exe
 ```
 
 ### Claude Desktop
@@ -120,14 +123,15 @@ not start the server in the repo folder, so this wraps the command in a `cd` (Wi
 
 ### VS Code / GitHub Copilot
 
-Add to your user-level `mcp.json` or the workspace `.vscode/mcp.json`:
+Add to the workspace `.vscode/mcp.json` with this repo open as the workspace (in a user-level
+`mcp.json`, use the absolute path instead of `${workspaceFolder}`):
 
 ```json
 {
   "servers": {
     "worldquant-mcp": {
       "type": "stdio",
-      "command": ".venv/Scripts/worldquant-mcp.exe",
+      "command": "${workspaceFolder}/.venv/Scripts/worldquant-mcp.exe",
       "env": {
         "WQ_BRAIN_EMAIL": "<your-email>",
         "WQ_BRAIN_PASSWORD": "<your-password>"
@@ -188,7 +192,7 @@ Copy `.env.example` to `.env`. All variables except the credentials are optional
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `WQ_BRAIN_EMAIL`, `WQ_BRAIN_PASSWORD` | (required) | BRAIN credentials |
+| `WQ_BRAIN_EMAIL`, `WQ_BRAIN_PASSWORD` | (required for API tools) | BRAIN credentials (`worldquant_signin_email` / `worldquant_signin_password` are accepted as aliases) |
 | `WQ_BRAIN_BASE_URL` | `https://api.worldquantbrain.com` | API base URL |
 | `WQ_BRAIN_REQUEST_TIMEOUT` | `30` | Per-request HTTP timeout (s) |
 | `WQ_BRAIN_POLL_INTERVAL` | `10` | Seconds between simulation polls |

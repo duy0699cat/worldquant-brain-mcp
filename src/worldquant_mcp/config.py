@@ -25,13 +25,19 @@ class WorldQuantConfig:
     experiment_memory_path: Path = Path("src/worldquant_mcp/data/experiment_memory.json")
 
     @classmethod
-    def from_env(cls, dotenv_path: str | os.PathLike[str] | None = None) -> "WorldQuantConfig":
+    def from_env(
+        cls,
+        dotenv_path: str | os.PathLike[str] | None = None,
+        *,
+        require_credentials: bool = True,
+    ) -> "WorldQuantConfig":
         load_dotenv(dotenv_path=dotenv_path or ".env", override=False)
 
-        email = os.getenv("WQ_BRAIN_EMAIL") or os.getenv("worldquant_signin_email")
-        password = os.getenv("WQ_BRAIN_PASSWORD") or os.getenv("worldquant_signin_password")
+        email = os.getenv("WQ_BRAIN_EMAIL") or os.getenv("worldquant_signin_email") or ""
+        password = os.getenv("WQ_BRAIN_PASSWORD") or os.getenv("worldquant_signin_password") or ""
 
-        if not email or not password:
+        # Local-only tools (reference search, experiment memory) only need the paths.
+        if require_credentials and (not email or not password):
             raise ValueError(
                 "Missing WorldQuant credentials. Set WQ_BRAIN_EMAIL/WQ_BRAIN_PASSWORD "
                 "or worldquant_signin_email/worldquant_signin_password."

@@ -49,13 +49,19 @@ def get_config() -> WorldQuantConfig:
 
 
 @lru_cache(maxsize=1)
+def get_local_config() -> WorldQuantConfig:
+    """Config for tools that never call the API, so they work without credentials."""
+    return WorldQuantConfig.from_env(require_credentials=False)
+
+
+@lru_cache(maxsize=1)
 def get_client() -> WorldQuantClient:
     return WorldQuantClient(get_config())
 
 
 @lru_cache(maxsize=1)
 def get_reference_index() -> ReferenceIndex:
-    config = get_config()
+    config = get_local_config()
     return ReferenceIndex.load(config.reference_chunks_path, config.reference_markdown_path)
 
 
@@ -379,7 +385,7 @@ def log_alpha_experiment(
 def list_alpha_experiments(limit: int = 20, theme: str = "", mechanism_tag: str = "") -> dict:
     """List recent logged experiments from local experiment memory."""
     return list_logged_experiments(
-        get_config(),
+        get_local_config(),
         limit=limit,
         theme=theme or None,
         mechanism_tag=mechanism_tag or None,
@@ -409,7 +415,7 @@ def validate_alpha_novelty_shadow(
 ) -> dict:
     """Validate AST-based novelty clustering against logged experiment alphas."""
     return validate_logged_expression_novelty_shadow(
-        get_config(),
+        get_local_config(),
         target_ids=target_ids,
         top_matches=top_matches,
     )
