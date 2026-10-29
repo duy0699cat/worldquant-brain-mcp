@@ -892,7 +892,9 @@ def _summarize_alpha(alpha: dict[str, Any]) -> dict[str, Any]:
         },
         "blockingChecks": blocking_checks,
         "pendingChecks": pending_checks,
-        "submittable": not blocking_checks and not pending_checks,
+        # PENDING is not FAIL: Brain only computes checks like SELF_CORRELATION when
+        # asked (get_alpha_self_correlation), so they must not block submission here.
+        "submittable": not blocking_checks,
     }
 
 

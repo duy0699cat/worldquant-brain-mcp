@@ -144,6 +144,13 @@ def get_alpha_submission(alpha_id: str) -> dict:
 
 
 @mcp.tool()
+def get_alpha_self_correlation(alpha_id: str) -> dict:
+    """Compute and fetch self-correlation against your other alphas (resolves a PENDING SELF_CORRELATION check)."""
+    result = get_client().get_alpha_self_correlation(alpha_id)
+    return result if isinstance(result, dict) else {"data": result}
+
+
+@mcp.tool()
 def create_simulation(
     expression: str,
     region: str = "USA",

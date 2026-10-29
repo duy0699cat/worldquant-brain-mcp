@@ -14,8 +14,8 @@ def validate_alpha_submission(client: WorldQuantClient, alpha_id: str) -> dict[s
     failed_checks = [check for check in checks if check.get("result") == "FAIL"]
     pending_checks = [check for check in checks if check.get("result") == "PENDING"]
     # Only FAILED checks block submission. PENDING checks (e.g. SELF_CORRELATION)
-    # are OS-stage computations that Brain runs after submission — they do NOT
-    # block IS→OS promotion. [REDACTED] and [REDACTED] both shipped with PENDING checks.
+    # have not been computed yet; Brain starts them only when asked, so call
+    # get_alpha_self_correlation to see the real numbers before submitting.
     submittable = not failed_checks
 
     return {

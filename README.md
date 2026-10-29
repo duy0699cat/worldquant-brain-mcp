@@ -55,7 +55,7 @@ for the research logged in [`docs/quant-journey.md`](docs/quant-journey.md) (May
 
 ```mermaid
 flowchart LR
-    A["MCP client<br/>(Claude, Codex, Copilot)"] -- stdio --> B["server.py<br/>24 FastMCP tools"]
+    A["MCP client<br/>(Claude, Codex, Copilot)"] -- stdio --> B["server.py<br/>25 FastMCP tools"]
     B --> C["tools/lab.py<br/>batch sim, mutation,<br/>hypothesis mapping, ranking"]
     B --> D["tools/research.py<br/>tools/submission.py"]
     C --> E["client.py<br/>BRAIN API client:<br/>auth, 429 backoff, bounded polling"]
@@ -157,7 +157,7 @@ agents in [`.github/agents/`](.github/agents/) (`quant-scout`, `quant-lab`) are 
 | Simulation | `create_simulation`, `get_simulation`, `wait_simulation`, `batch_simulate` |
 | Research pipeline | `map_research_hypothesis`, `ingest_research_material`, `mutate_alpha_expression`, `parallel_mechanism_search`, `summarize_alpha_batch_by_id` |
 | Novelty & memory | `analyze_alpha_novelty`, `validate_alpha_novelty_shadow`, `log_alpha_experiment`, `list_alpha_experiments` |
-| Submission | `validate_alpha_submission_by_id`, `submit_alpha_by_id` (requires `confirm=True`), `get_alpha_submission` |
+| Submission | `validate_alpha_submission_by_id`, `get_alpha_self_correlation`, `submit_alpha_by_id` (requires `confirm=True`), `get_alpha_submission` |
 
 ## Example session
 
@@ -252,9 +252,10 @@ logged experiments. Ranking still uses the legacy metric. In the journal's valid
 and unrelated families scored about 0.1. The ranking has not been switched to the AST score yet.
 
 **Bugs the live runs exposed, and what changed:**
-- *PENDING checks treated as failures.* `validate_alpha_submission` used to block any alpha with
-  a `PENDING` check. BRAIN then accepted an alpha whose `SELF_CORRELATION` was still pending,
-  which showed that only `FAIL` should block. The rule was changed to match.
+- *PENDING checks treated as failures.* The readiness check used to block any alpha with a
+  `PENDING` check. But `PENDING` only means BRAIN hasn't computed that check yet: for
+  `SELF_CORRELATION` it starts when you request it. So now only `FAIL` blocks, and
+  `get_alpha_self_correlation` requests the computation and returns the actual correlations.
 - *Wrong field types in hypothesis mapping.* An early microstructure search branch picked
   group-typed fields such as `currency` and produced unit errors. `lab.py` now filters candidate
   fields with allow/deny token lists.

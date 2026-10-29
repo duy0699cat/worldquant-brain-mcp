@@ -1,58 +1,53 @@
-import os
+"""Probe a few BRAIN API endpoints and print status codes and response snippets."""
+
 import json
-import asyncio
-from dotenv import load_dotenv
-from worldquant_mcp.config import WorldQuantConfig
+from datetime import datetime
+
 from worldquant_mcp.client import WorldQuantClient
+from worldquant_mcp.config import WorldQuantConfig
 
-async def probe():
-    load_dotenv()
-    config = WorldQuantConfig()
-    # The client needs to be initialized. 
-    # Looking at client.py, it likely manages its own session or needs to be used in a context manager.
+ENDPOINTS = [
+    "/data-fields",
+    "/data-fields/subindustry",
+    "/universes",
+    "/universes/TOP3000",
+    "/instruments",
+    "/assets",
+]
+
+PARAMS = {
+    "region": "USA",
+    "delay": "1",
+    "universe": "TOP3000",
+    "instrumentType": "EQUITY",
+}
+
+
+def probe() -> None:
+    config = WorldQuantConfig.from_env()
     client = WorldQuantClient(config)
-    
-    # We need to authenticate. The client might have an authenticate method.
-    # Looking at our previous read, we should check for login/auth.
-    
-    endpoints = [
-        "/data-fields",
-        "/data-fields/subindustry",
-        "/universes",
-        "/universes/TOP3000",
-        "/instruments",
-        "/assets"
-    ]
-    
-    params = {
-        "region": "USA",
-        "delay": "1",
-        "universe": "TOP3000",
-        "instrumentType": "EQUITY"
-    }
-
-    print(f"Timestamp: {asyncio.get_event_loop().time()}")
-    
-    # Attempt to authenticate if needed
-    # (Assuming basic session-based access for now or that the client handles it)
-    
-    async with client:
-        for endpoint in endpoints:
+    try:
+        client.authenticate()
+        print("Timestamp: " + datetime.now().isoformat())
+        for endpoint in ENDPOINTS:
+            print(f"Probing {endpoint}...")
             try:
-                print(f"Probing {endpoint}...")
-                url = f"{config.api_base_url}{endpoint}"
-                async with client.session.get(url, params=params) as resp:
-                    print(f"Status: {resp.status}")
-                    if resp.status == 200:
-                        data = await resp.json()
+                # Use the raw session so non-2xx responses are printed instead of raised.
+                response = client.http.get(endpoint, params=PARAMS)
+                print(f"Status: {response.status_code}")
+                if response.status_code == 200 and "json" in response.headers.get("content-type", ""):
+                    data = response.json()
+                    if isinstance(data, dict):
                         print(f"Keys: {list(data.keys())}")
-                        print(f"Snippet: {json.dumps(data)[:200]}")
-                    else:
-                        text = await resp.text()
-                        print(f"Response: {text[:200]}")
-            except Exception as e:
-                print(f"Error probing {endpoint}: {e}")
+                    print(f"Snippet: {json.dumps(data)[:200]}")
+                else:
+                    print(f"Response: {response.text[:200]}")
+            except Exception as exc:
+                print(f"Error probing {endpoint}: {exc}")
             print("-" * 20)
+    finally:
+        client.close()
+
 
 if __name__ == "__main__":
-    asyncio.run(probe())
+    probe()

@@ -105,6 +105,25 @@ class WorldQuantClient:
     def get_alpha_check(self, alpha_id: str) -> dict[str, Any] | list[Any]:
         return self._get_json(f"/alphas/{alpha_id}/check")
 
+    def get_alpha_self_correlation(
+        self, alpha_id: str, *, max_attempts: int = 4, retry_delay_seconds: float = 3.0
+    ) -> dict[str, Any] | list[Any]:
+        """Fetch self-correlation records, which Brain computes on request.
+
+        A SELF_CORRELATION check stays PENDING until this endpoint is called, and the
+        records can take a few seconds to appear, so retry a bounded number of times.
+        """
+        result: dict[str, Any] | list[Any] = {}
+        for attempt in range(max(1, max_attempts)):
+            response = self._request("GET", f"/alphas/{alpha_id}/correlations/self")
+            if response.text.strip():
+                result = response.json()
+                if isinstance(result, dict) and result.get("records"):
+                    return result
+            if attempt < max_attempts - 1:
+                time.sleep(retry_delay_seconds)
+        return result
+
     def submit_simulation(
         self,
         expression: str,
